@@ -1,0 +1,69 @@
+package com.tambao.EshopManeger_Backend.service.Impl;
+
+import com.tambao.EshopManeger_Backend.dto.ProductDto;
+import com.tambao.EshopManeger_Backend.entity.Category;
+import com.tambao.EshopManeger_Backend.entity.Product;
+import com.tambao.EshopManeger_Backend.exception.ResourceNotFoundException;
+import com.tambao.EshopManeger_Backend.mapper.ProductMapper;
+import com.tambao.EshopManeger_Backend.repository.CategoryRepository;
+import com.tambao.EshopManeger_Backend.repository.ProductRepository;
+import com.tambao.EshopManeger_Backend.service.IProductService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.stream.Collectors;
+
+@Service
+public class ProductService implements IProductService {
+    @Autowired
+    private ProductRepository productRepository;
+
+    @Autowired
+    private CategoryRepository categoryRepository;
+
+    @Override
+    public List<ProductDto> getAllProducts() {
+        List<Product> products = productRepository.findAll();
+        return products.stream()
+                .map(ProductMapper::mapToProductDTO)
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public ProductDto getProductById(int id) {
+        Product product = productRepository.findById(id)
+                .orElseThrow(()->new ResourceNotFoundException("Product not found with id= " + id));
+        return ProductMapper.mapToProductDTO(product);
+    }
+
+    @Override
+    public ProductDto createProduct(ProductDto productDto) {
+        Product product = ProductMapper.mapToProduct(productDto);
+        Product savedProduct = productRepository.save(product);
+        return ProductMapper.mapToProductDTO(savedProduct);
+    }
+
+    @Override
+    public ProductDto updateProduct(Integer id ,ProductDto productDto) {
+        Product product = productRepository.findById(id)
+                .orElseThrow(()->new ResourceNotFoundException("Product not found with id= " + id));
+        Category category = categoryRepository.findById(productDto.getCategoryId())
+                .orElseThrow(() -> new ResourceNotFoundException("Category not found with id= " + productDto.getCategoryId()));
+        product.setName(productDto.getName());
+        product.setDescription(productDto.getDescription());
+        product.setPrice(productDto.getPrice());
+        product.setQuantity(productDto.getQuantity());
+        product.setDiscountedPrice(productDto.getDiscountedPrice());
+        product.setCategory(category);
+        Product updatedProduct = productRepository.save(product);
+        return ProductMapper.mapToProductDTO(updatedProduct);
+    }
+
+    @Override
+    public void deleteProduct(int id) {
+        Product product = productRepository.findById(id)
+                .orElseThrow(()->new ResourceNotFoundException("Product not found with id= " + id));
+        productRepository.delete(product);
+    }
+}
