@@ -1,0 +1,11 @@
+package com.tambao.EshopManeger_Backend.repository;
+
+import com.tambao.EshopManeger_Backend.entity.Users;
+import org.springframework.data.jpa.repository.JpaRepository;
+
+public interface UserRepository extends JpaRepository<Users, Integer> {
+    boolean existsByEmail(String email);
+    boolean existsByUserName(String userName);
+    Users findByEmail(String email);
+    Users findByUserName(String username);
+}

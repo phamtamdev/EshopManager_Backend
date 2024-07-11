@@ -39,8 +39,8 @@ public class Users {
     @Column(name = "address")
     private String address;
 
-    @Column(name = "status")
-    private int status;
+    @Column(name = "enabled")
+    private boolean enabled ;
 
     @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinTable(
