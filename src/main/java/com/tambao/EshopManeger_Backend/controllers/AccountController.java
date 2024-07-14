@@ -52,4 +52,9 @@ public class AccountController {
         JwtResponse response = accountService.getMyInfo(username);
         return ResponseEntity.status(response.getStatusCode()).body(response);
     }
+
+    @GetMapping("/active")
+    public ResponseEntity<?> active(@RequestParam("email") String email){
+        return accountService.activeAccount(email);
+    }
 }

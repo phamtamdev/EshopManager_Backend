@@ -10,6 +10,7 @@ import com.tambao.EshopManeger_Backend.repository.RoleRepository;
 import com.tambao.EshopManeger_Backend.repository.UserRepository;
 import com.tambao.EshopManeger_Backend.security.LoginRequest;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -36,6 +37,9 @@ public class AccountService {
     @Autowired
     private BCryptPasswordEncoder bCryptPasswordEncoder;
 
+    @Autowired
+    private EmailService emailService;
+
     public UserDto registerUser(UserDto userDto) {
         if(userRepository.existsByUserName(userDto.getUserName())) {
             throw new ResourceNotFoundException("Username already exists");
@@ -59,6 +63,7 @@ public class AccountService {
             user.setRoles(roles);
         }
         userRepository.save(user);
+        sendEmailActive(user.getEmail());
         return UserMapper.mapToUsersDto(user);
     }
 
@@ -100,5 +105,27 @@ public class AccountService {
             response.setMessage(e.getMessage());
         }
         return response;
+    }
+
+    public void sendEmailActive(String email) {
+        String subject = "Kích Hoạt Tài Khoản Của Bạn Tại Web EShop Manager!";
+        String url = "http://localhost:3000/active/" + email;
+        String body = "Click Vào Đường Link Để Kích Hoạt Tài Khoản: ";
+        body+= "<br/> <a href= "+url+">"+url+"</a> ";
+        emailService.sendEmail("tambao11223344@gmail.com",email,subject,body);
+    }
+
+    public ResponseEntity<?> activeAccount(String email) {
+        Users user = userRepository.findByEmail(email);
+        if(user == null){
+            return ResponseEntity.badRequest().body("Không tìm thấy người dùng này!");
+        }
+
+        if(user.isEnabled()){
+            return ResponseEntity.badRequest().body("Tài Khoản Đã Được Kích Hoạt!");
+        }
+        user.setEnabled(true);
+        userRepository.saveAndFlush(user);
+        return ResponseEntity.ok("Account activated");
     }
 }
