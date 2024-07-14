@@ -38,7 +38,7 @@ public class UsersService implements IUsersService {
         if (user == null) {
             throw new ResourceNotFoundException("User not found");
         }
-        User userDetails = new User(user.getUserName(), user.getPassword(), rolesAuthorities(user.getRoles()));
+        User userDetails = new User(user.getUserName(), user.getPassword(), user.isEnabled(), true,true,true, rolesAuthorities(user.getRoles()));
         return userDetails;
     }
 

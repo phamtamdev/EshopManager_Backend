@@ -10,9 +10,9 @@ import com.tambao.EshopManeger_Backend.repository.RoleRepository;
 import com.tambao.EshopManeger_Backend.repository.UserRepository;
 import com.tambao.EshopManeger_Backend.security.LoginRequest;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.authentication.*;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -80,6 +80,9 @@ public class AccountService {
             response.setRoles(roles);
             response.setExpirationTime("24 Hrs");
             response.setMessage("Successfully logged in");
+        }catch (DisabledException e) {
+            response.setStatusCode(HttpStatus.FORBIDDEN.value());
+            response.setMessage("User is disabled");
         }catch (Exception e){
             response.setStatusCode(500);
             response.setMessage(e.getMessage());
