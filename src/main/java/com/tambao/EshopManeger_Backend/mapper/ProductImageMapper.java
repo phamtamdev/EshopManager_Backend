@@ -6,7 +6,7 @@ import com.tambao.EshopManeger_Backend.entity.ProductImage;
 public class ProductImageMapper {
 
     public static ProductImageDto mapToProductImageDto(ProductImage productImage) {
-        return new ProductImageDto(productImage.getId(),productImage.getName(), productImage.getUrl());
+        return new ProductImageDto(productImage.getId(),productImage.getName(), productImage.getUrl(), productImage.isIcon());
     }
 
     public static ProductImage mapToProductImage(ProductImageDto productImageDto) {
@@ -14,6 +14,7 @@ public class ProductImageMapper {
         productImage.setId(productImageDto.getId());
         productImage.setName(productImageDto.getName());
         productImage.setUrl(productImageDto.getUrl());
+        productImage.setIcon(productImageDto.isIcon());
         return productImage;
     }
 }

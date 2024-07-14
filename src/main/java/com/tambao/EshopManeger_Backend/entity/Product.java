@@ -1,6 +1,5 @@
 package com.tambao.EshopManeger_Backend.entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -25,7 +24,7 @@ public class Product {
     @Column(name = "name")
     private String name;
 
-    @Column(name = "decription")
+    @Column(name = "decription", columnDefinition = "LONGTEXT")
     private String description;
 
     @Column(name = "quantity")
@@ -36,6 +35,9 @@ public class Product {
 
     @Column(name = "discounted_price")
     private Double discountedPrice;
+
+    @Column(name = "brand")
+    private String brand;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "category_id")
@@ -55,5 +57,8 @@ public class Product {
 
     @OneToMany(mappedBy = "product", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<Wishlists>wishlists;
+
+    @OneToMany(mappedBy = "product", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private List<ProductVariant> productVariants;
 
 }

@@ -7,29 +7,28 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Entity
-@Table(name = "product_image")
-@Setter
+@Table(name = "product_variant")
 @Getter
-@NoArgsConstructor
+@Setter
 @AllArgsConstructor
-public class ProductImage {
+@NoArgsConstructor
+public class ProductVariant {
 
     @Id
-    @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    @Column(name = "id")
+    private long id;
 
-    @Column(name = "name")
-    private String name;
+    @Column(name = "variant_name")
+    private String variantName;
 
-    @Column(name = "url")
-    private String url;
+    @Column(name = "variant_value")
+    private String variantValue;
 
-    @Column(name = "icon")
-    private boolean icon;
+    @Column(name = "additional_price")
+    private double additionalPrice;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "product_id")
     private Product product;
-
 }

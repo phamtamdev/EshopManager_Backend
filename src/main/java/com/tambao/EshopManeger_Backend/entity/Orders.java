@@ -24,10 +24,6 @@ public class Orders {
 
     @Column(name = "create_at")
     private Date createAt;
-
-    @Column(name = "shipping_address")
-    private String shippingAddress;
-
     @Column(name = "total_amount")
     private double totalAmount;
 
@@ -51,4 +47,8 @@ public class Orders {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "shipping_id")
     private Shipping shipping;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "shipping_address_id")
+    private ShippingAddress shippingAddress;
 }
