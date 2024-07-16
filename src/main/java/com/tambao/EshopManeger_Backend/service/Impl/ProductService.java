@@ -9,6 +9,10 @@ import com.tambao.EshopManeger_Backend.repository.CategoryRepository;
 import com.tambao.EshopManeger_Backend.repository.ProductRepository;
 import com.tambao.EshopManeger_Backend.service.IProductService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -28,6 +32,31 @@ public class ProductService implements IProductService {
         return products.stream()
                 .map(ProductMapper::mapToProductDTO)
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public Page<ProductDto> getProductsWithPage(int page, int size) {
+        Page<Product> products = productRepository.findAll(PageRequest.of(page, size));
+        return products.map(ProductMapper::mapToProductDTO);
+    }
+
+    @Override
+    public Page<ProductDto> getProductsWithPageAndSearch(String keyword, int page, int size) {
+        Page<Product> products = productRepository.findByNameContainingIgnoreCase(keyword, PageRequest.of(page, size));
+        return products.map(ProductMapper::mapToProductDTO);
+    }
+
+    @Override
+    public Page<ProductDto> getProductsWithPageAndSorting(String field, int page, int size) {
+        Page<Product> products = productRepository.findAll(PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, field)));
+        return products.map(ProductMapper::mapToProductDTO);
+    }
+
+    @Override
+    public Page<ProductDto> getProductsWithPageAndSortingAndSearch(String field, String keyword, int page, int size) {
+        Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, field));
+        Page<Product> products = productRepository.findByNameContainingIgnoreCase(keyword, pageable);
+        return products.map(ProductMapper::mapToProductDTO);
     }
 
     @Override

@@ -8,7 +8,7 @@ import com.tambao.EshopManeger_Backend.exception.ResourceNotFoundException;
 import com.tambao.EshopManeger_Backend.mapper.UserMapper;
 import com.tambao.EshopManeger_Backend.repository.RoleRepository;
 import com.tambao.EshopManeger_Backend.repository.UserRepository;
-import com.tambao.EshopManeger_Backend.security.LoginRequest;
+import com.tambao.EshopManeger_Backend.dto.LoginRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -118,6 +118,12 @@ public class AccountService {
         emailService.sendEmail("tambao11223344@gmail.com",email,subject,body);
     }
 
+    public void sendEmailOtp(String email, String otp){
+        String subject = "Mã OTP Thay Đổi Mật Khẩu!";
+        String body = "Mã OTP Của Bạn Là: <b>"+otp+"</b> ";
+        emailService.sendEmail("tambao11223344@gmail.com",email,subject,body);
+    }
+
     public ResponseEntity<?> activeAccount(String email) {
         Users user = userRepository.findByEmail(email);
         if(user == null){
@@ -130,5 +136,24 @@ public class AccountService {
         user.setEnabled(true);
         userRepository.saveAndFlush(user);
         return ResponseEntity.ok("Account activated");
+    }
+
+    public ResponseEntity<?> resetPassword(UserDto userDto) {
+        Users user = userRepository.findByEmail(userDto.getEmail());
+        if(user == null){
+            return ResponseEntity.badRequest().body("User not found");
+        }
+        user.setPassword(bCryptPasswordEncoder.encode(userDto.getPassword()));
+        userRepository.save(user);
+        return ResponseEntity.ok("Password reset");
+    }
+
+    public ResponseEntity<?> otpSend(String email, String otp) {
+        Users user = userRepository.findByEmail(email);
+        if(user == null){
+            return ResponseEntity.badRequest().body("User not found");
+        }
+        sendEmailOtp(email, otp);
+        return ResponseEntity.ok("OTP send");
     }
 }

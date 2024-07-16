@@ -1,4 +1,4 @@
-package com.tambao.EshopManeger_Backend.security;
+package com.tambao.EshopManeger_Backend.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

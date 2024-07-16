@@ -3,8 +3,9 @@ package com.tambao.EshopManeger_Backend.controllers;
 import com.tambao.EshopManeger_Backend.dto.JwtResponse;
 import com.tambao.EshopManeger_Backend.dto.UserDto;
 import com.tambao.EshopManeger_Backend.repository.UserRepository;
-import com.tambao.EshopManeger_Backend.security.LoginRequest;
+import com.tambao.EshopManeger_Backend.dto.LoginRequest;
 import com.tambao.EshopManeger_Backend.service.Impl.AccountService;
+import com.tambao.EshopManeger_Backend.service.Impl.UsersService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -20,6 +21,9 @@ public class AccountController {
 
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private UsersService usersService;
 
     @GetMapping("/existsByUserName")
     public ResponseEntity<Boolean> existsByUserName(@RequestParam("userName") String username) {
@@ -43,6 +47,16 @@ public class AccountController {
         userDto.setId(0);
         userDto = accountService.registerUser(userDto);
         return ResponseEntity.ok(userDto);
+    }
+
+    @GetMapping("/send-otp")
+    public ResponseEntity<?> sendOtp(@RequestParam("email") String email, @RequestParam("otp") String otp){
+        return ResponseEntity.ok(accountService.otpSend(email, otp));
+    }
+
+    @PostMapping("/forgot")
+    public ResponseEntity<?> forgotPassword(@RequestBody UserDto userDto) {
+        return ResponseEntity.ok(accountService.resetPassword(userDto));
     }
 
     @GetMapping("/info")

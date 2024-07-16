@@ -13,6 +13,7 @@ public class ProductMapper {
                 product.getDescription(),
                 product.getQuantity(),
                 product.getPrice(),
+                product.getBrand(),
                 product.getDiscountedPrice(),
                 product.getCategory().getId()
         );
@@ -24,6 +25,7 @@ public class ProductMapper {
         product.setName(productDto.getName());
         product.setDescription(productDto.getDescription());
         product.setQuantity(productDto.getQuantity());
+        product.setBrand(productDto.getBrand());
         product.setPrice(productDto.getPrice());
         product.setDiscountedPrice(productDto.getDiscountedPrice());
 
