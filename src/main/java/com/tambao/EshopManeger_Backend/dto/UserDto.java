@@ -18,4 +18,5 @@ public class UserDto {
     private String phone;
     private String address;
     private String source;
+    private String avatar;
 }

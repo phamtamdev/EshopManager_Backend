@@ -58,7 +58,7 @@ public class OAuth2LoginSuccessHandler implements AuthenticationSuccessHandler {
                 String hashedPassword = bCryptPasswordEncoder.encode(generatedPassword);
                 newUser.setUserName(username);
                 newUser.setPassword(hashedPassword);
-                saveUser(newUser);
+                saveWithLoginOAuth2(newUser);
                 String token = jwtService.generateToken(username);
                 response.sendRedirect(FRONT_END_URL + "/oauth2/redirect?code=" + token);
             } else {
@@ -82,7 +82,7 @@ public class OAuth2LoginSuccessHandler implements AuthenticationSuccessHandler {
                 String username = generateRandom();
                 newUser.setUserName(username);
                 newUser.setPassword(bCryptPasswordEncoder.encode(generateRandom()));
-                saveUser(newUser);
+                saveWithLoginOAuth2(newUser);
                 String token = jwtService.generateToken(username);
                 response.sendRedirect(FRONT_END_URL + "/oauth2/redirect?code=" + token);
             } else {
@@ -93,6 +93,32 @@ public class OAuth2LoginSuccessHandler implements AuthenticationSuccessHandler {
                     response.sendRedirect(FRONT_END_URL + "/login?error-login-facebook");
                 }
             }
+        }else if ("github".equals(auth2Authentication.getAuthorizedClientRegistrationId())) {
+            OAuth2User oAuth2User = (OAuth2User) authentication.getPrincipal();
+            Integer idGitHub = oAuth2User.getAttribute("id");
+            String name = oAuth2User.getAttribute("name");
+            String avatar_url = oAuth2User.getAttribute("avatar_url");
+            Users existingUser = usersService.findByEmail(idGitHub+"");
+            if (existingUser == null) {
+                UserDto newUser = new UserDto();
+                newUser.setEmail(idGitHub+"");
+                newUser.setFullName(name);
+                newUser.setSource("GITHUB");
+                newUser.setAvatar(avatar_url);
+                String username = generateRandom();
+                newUser.setUserName(username);
+                newUser.setPassword(bCryptPasswordEncoder.encode(generateRandom()));
+                saveWithLoginOAuth2(newUser);
+                String token = jwtService.generateToken(username);
+                response.sendRedirect(FRONT_END_URL + "/oauth2/redirect?code=" + token);
+            } else {
+                if (existingUser.getSource().equals("GITHUB")) {
+                    String token = jwtService.generateToken(existingUser.getUserName());
+                    response.sendRedirect(FRONT_END_URL+ "/oauth2/redirect?code=" + token);
+                } else {
+                    response.sendRedirect(FRONT_END_URL + "/login?error-login-github");
+                }
+            }
         }
     }
 
@@ -100,7 +126,7 @@ public class OAuth2LoginSuccessHandler implements AuthenticationSuccessHandler {
         return UUID.randomUUID().toString();
     }
 
-    private Users saveUser(UserDto userDto) {
+    private Users saveWithLoginOAuth2(UserDto userDto) {
         try{
             Role role = roleService.getByName("USER");
             if (role == null) {

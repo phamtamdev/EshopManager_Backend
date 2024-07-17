@@ -14,7 +14,8 @@ public class UserMapper {
                 user.getEmail(),
                 user.getPhone(),
                 user.getAddress(),
-                user.getSource()
+                user.getSource(),
+                user.getAvatar()
         );
     }
 
@@ -28,6 +29,7 @@ public class UserMapper {
         user.setPhone(dto.getPhone());
         user.setAddress(dto.getAddress());
         user.setSource(dto.getSource());
+        user.setAvatar(dto.getAvatar());
         return user;
     }
 }
