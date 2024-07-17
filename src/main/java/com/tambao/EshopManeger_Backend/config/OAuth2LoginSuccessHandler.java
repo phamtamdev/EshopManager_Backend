@@ -58,18 +58,7 @@ public class OAuth2LoginSuccessHandler implements AuthenticationSuccessHandler {
                 String hashedPassword = bCryptPasswordEncoder.encode(generatedPassword);
                 newUser.setUserName(username);
                 newUser.setPassword(hashedPassword);
-
-                Role role = roleService.getByName("USER");
-                if (role == null) {
-                    role = new Role();
-                    role.setName("USER");
-                    roleService.addRole(role);
-                }
-                Users user = UserMapper.mapToUsers(newUser);
-                user.setRoles(List.of(role));
-                user.setEnabled(true);
-                usersService.save(user);
-
+                saveUser(newUser);
                 String token = jwtService.generateToken(username);
                 response.sendRedirect(FRONT_END_URL + "/oauth2/redirect?code=" + token);
             } else {
@@ -80,11 +69,54 @@ public class OAuth2LoginSuccessHandler implements AuthenticationSuccessHandler {
                     response.sendRedirect(FRONT_END_URL + "/login?error-login-google");
                 }
             }
+        } else if ("facebook".equals(auth2Authentication.getAuthorizedClientRegistrationId())) {
+            OAuth2User oAuth2User = (OAuth2User) authentication.getPrincipal();
+            String idEmail = oAuth2User.getAttribute("id");
+            String name = oAuth2User.getAttribute("name");
+            Users existingUser = usersService.findByEmail(idEmail);
+            if (existingUser == null) {
+                UserDto newUser = new UserDto();
+                newUser.setEmail(idEmail);
+                newUser.setFullName(name);
+                newUser.setSource("FACEBOOK");
+                String username = generateRandom();
+                newUser.setUserName(username);
+                newUser.setPassword(bCryptPasswordEncoder.encode(generateRandom()));
+                saveUser(newUser);
+                String token = jwtService.generateToken(username);
+                response.sendRedirect(FRONT_END_URL + "/oauth2/redirect?code=" + token);
+            } else {
+                if (existingUser.getSource().equals("FACEBOOK")) {
+                    String token = jwtService.generateToken(existingUser.getUserName());
+                    response.sendRedirect(FRONT_END_URL+ "/oauth2/redirect?code=" + token);
+                } else {
+                    response.sendRedirect(FRONT_END_URL + "/login?error-login-facebook");
+                }
+            }
         }
     }
 
     private String generateRandom() {
         return UUID.randomUUID().toString();
+    }
+
+    private Users saveUser(UserDto userDto) {
+        try{
+            Role role = roleService.getByName("USER");
+            if (role == null) {
+                role = new Role();
+                role.setName("USER");
+                roleService.addRole(role);
+            }
+            Users user = UserMapper.mapToUsers(userDto);
+            user.setRoles(List.of(role));
+            user.setEnabled(true);
+            usersService.save(user);
+            return user;
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        return null;
     }
 }
 
