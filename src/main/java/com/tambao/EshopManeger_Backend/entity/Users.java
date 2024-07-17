@@ -42,11 +42,18 @@ public class Users {
     @Column(name = "enabled")
     private boolean enabled ;
 
+    @Column(name = "source")
+    private String source;
+
     @Column(name = "avatar", columnDefinition = "LONGTEXT")
     @Lob
     private String avatar;
 
-    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @ManyToMany(fetch = FetchType.EAGER, cascade = {
+            CascadeType.REFRESH,
+            CascadeType.DETACH,
+            CascadeType.MERGE
+    })
     @JoinTable(
             name = "user_role",
             joinColumns = @JoinColumn(name = "user_id"),

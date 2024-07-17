@@ -33,6 +33,11 @@ public class UsersService implements IUsersService {
     }
 
     @Override
+    public Users save(Users user) {
+        return userRepository.save(user);
+    }
+
+    @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         Users user = findByUserName(username);
         if (user == null) {

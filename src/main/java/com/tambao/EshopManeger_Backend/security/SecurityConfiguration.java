@@ -1,5 +1,6 @@
 package com.tambao.EshopManeger_Backend.security;
 
+import com.tambao.EshopManeger_Backend.config.OAuth2LoginSuccessHandler;
 import com.tambao.EshopManeger_Backend.config.JwtFilter;
 import com.tambao.EshopManeger_Backend.service.Impl.UsersService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,11 +14,18 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
+import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
+import org.springframework.security.oauth2.client.userinfo.OAuth2UserService;
+import org.springframework.security.oauth2.core.user.DefaultOAuth2User;
+import org.springframework.security.oauth2.core.user.OAuth2User;
+import org.springframework.security.oauth2.core.user.OAuth2UserAuthority;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
 
 import java.util.Arrays;
+import java.util.Collections;
 
 @Configuration
 public class SecurityConfiguration {
@@ -39,6 +47,14 @@ public class SecurityConfiguration {
         return daoAuthenticationProvider;
     }
 
+    private final OAuth2LoginSuccessHandler customOAuth2LoginSuccessHandler;
+
+    @Autowired
+    public SecurityConfiguration(OAuth2LoginSuccessHandler customOAuth2LoginSuccessHandler) {
+        this.customOAuth2LoginSuccessHandler = customOAuth2LoginSuccessHandler;
+    }
+
+
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http.authorizeRequests(
@@ -47,6 +63,13 @@ public class SecurityConfiguration {
                         .requestMatchers(HttpMethod.POST, Endpoints.PUBLIC_POST_ENDPOINTS).permitAll()
                         .requestMatchers(HttpMethod.GET, Endpoints.ADMIN_GET_ENDPOINTS).hasAuthority("ADMIN")
                         .requestMatchers(HttpMethod.POST, Endpoints.ADMIN_POST_ENDPOINTS).hasAuthority("ADMIN")
+        ).oauth2Login(oath2 ->
+                oath2
+                    .authorizationEndpoint(authorizationEndpoint ->
+                            authorizationEndpoint.baseUri("/oauth2/authorize")
+                    )
+                    .successHandler(customOAuth2LoginSuccessHandler)
+
         );
         http.cors(cors->{
             cors.configurationSource(request -> {
@@ -64,8 +87,22 @@ public class SecurityConfiguration {
         return http.build();
     }
 
+
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration configuration) throws Exception {
         return configuration.getAuthenticationManager();
+    }
+
+    @Bean
+    public OAuth2UserService<OAuth2UserRequest, OAuth2User> oAuth2UserService() {
+        return new DefaultOAuth2UserService() {
+            @Override
+            public OAuth2User loadUser(OAuth2UserRequest userRequest) {
+                OAuth2User user = super.loadUser(userRequest);
+                return new DefaultOAuth2User(Collections.singleton(
+                        new OAuth2UserAuthority(user.getAttributes())),
+                        user.getAttributes(), "sub");
+            }
+        };
     }
 }

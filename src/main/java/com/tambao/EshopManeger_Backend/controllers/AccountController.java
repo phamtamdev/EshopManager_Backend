@@ -5,7 +5,6 @@ import com.tambao.EshopManeger_Backend.dto.UserDto;
 import com.tambao.EshopManeger_Backend.repository.UserRepository;
 import com.tambao.EshopManeger_Backend.dto.LoginRequest;
 import com.tambao.EshopManeger_Backend.service.Impl.AccountService;
-import com.tambao.EshopManeger_Backend.service.Impl.UsersService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -21,9 +20,6 @@ public class AccountController {
 
     @Autowired
     private UserRepository userRepository;
-
-    @Autowired
-    private UsersService usersService;
 
     @GetMapping("/existsByUserName")
     public ResponseEntity<Boolean> existsByUserName(@RequestParam("userName") String username) {

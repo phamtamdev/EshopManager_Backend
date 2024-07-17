@@ -62,6 +62,7 @@ public class AccountService {
             roles.add(role);
             user.setRoles(roles);
         }
+        user.setSource("LOCAL");
         userRepository.save(user);
         sendEmailActive(user.getEmail());
         return UserMapper.mapToUsersDto(user);
