@@ -68,7 +68,9 @@ public class ProductService implements IProductService {
 
     @Override
     public ProductDto createProduct(ProductDto productDto) {
+        Category category = categoryRepository.findById(productDto.getCategoryId()).orElseThrow(()->new ResourceNotFoundException("Category not found with id= " + productDto.getCategoryId()));
         Product product = ProductMapper.mapToProduct(productDto);
+        product.setCategory(category);
         Product savedProduct = productRepository.save(product);
         return ProductMapper.mapToProductDTO(savedProduct);
     }

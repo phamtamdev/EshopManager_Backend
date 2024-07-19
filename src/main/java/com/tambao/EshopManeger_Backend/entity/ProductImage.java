@@ -22,6 +22,9 @@ public class ProductImage {
     @Column(name = "name")
     private String name;
 
+    @Column(name = "data", columnDefinition = "LONGTEXT")
+    private String data;
+
     @Column(name = "url")
     private String url;
 

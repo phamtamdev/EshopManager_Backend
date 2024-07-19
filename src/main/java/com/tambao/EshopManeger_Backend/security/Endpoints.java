@@ -21,5 +21,15 @@ public class Endpoints {
     public static final String[] ADMIN_POST_ENDPOINTS = {
             "/api/products/**",
             "/api/categories/**",
+            "api/product-image/**",
+            "/api/product-variant/**"
+    };
+
+    public static final String[] ADMIN_DELETE_ENDPOINTS = {
+            "/api/users/**",
+            "/api/categories/**",
+            "/api/products/**",
+            "/api/product-image/**",
+            "/api/product-variant/**"
     };
 }

@@ -13,5 +13,7 @@ public class ProductImageDto {
     private int id;
     private String name;
     private String url;
+    private String data;
     private boolean icon;
+    private Integer productId;
 }
