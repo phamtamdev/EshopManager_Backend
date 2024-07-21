@@ -7,16 +7,18 @@ import com.tambao.EshopManeger_Backend.entity.Product;
 public class ProductMapper {
 
     public static ProductDto mapToProductDTO(Product product) {
-        return new ProductDto(
-                product.getId(),
-                product.getName(),
-                product.getDescription(),
-                product.getQuantity(),
-                product.getPrice(),
-                product.getBrand(),
-                product.getDiscountedPrice(),
-                product.getCategory().getId()
-        );
+        ProductDto productDto = new ProductDto();
+        productDto.setId(product.getId());
+        productDto.setName(product.getName());
+        productDto.setDescription(product.getDescription());
+        productDto.setPrice(product.getPrice());
+        productDto.setQuantity(product.getQuantity());
+        productDto.setDiscountedPrice(product.getDiscountedPrice());
+        productDto.setBrand(product.getBrand());
+        if (product.getCategory() != null) {
+            productDto.setCategoryId(product.getCategory().getId());
+        }
+        return productDto;
     }
 
     public static Product mapToProduct(ProductDto productDto) {

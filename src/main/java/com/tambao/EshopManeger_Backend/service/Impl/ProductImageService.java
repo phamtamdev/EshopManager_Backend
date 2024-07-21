@@ -10,6 +10,7 @@ import com.tambao.EshopManeger_Backend.repository.ProductRepository;
 import com.tambao.EshopManeger_Backend.service.IProductImageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -23,11 +24,23 @@ public class ProductImageService implements IProductImageService {
     private ProductRepository productRepository;
 
     @Override
-    public List<ProductImageDto> findByProductId(int id) {
+    public List<ProductImageDto> findByProductId(Integer id) {
         List<ProductImage> productImages = productImageRepository.findByProductId(id);
         return productImages.stream()
                 .map(ProductImageMapper::mapToProductImageDto)
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public ProductImageDto findByProductIdIsIcon(Integer id, Boolean icon) {
+        if (!icon) {
+            throw new ResourceNotFoundException("Cannot find image with icon set to false.");
+        }
+        ProductImage productImage = productImageRepository.findByProductIdAndIcon(id, true);
+        if(productImage == null){
+            throw new ResourceNotFoundException("Product Image Not Found");
+        }
+        return ProductImageMapper.mapToProductImageDto(productImage);
     }
 
     @Override
@@ -41,7 +54,7 @@ public class ProductImageService implements IProductImageService {
     @Override
     public ProductImageDto update(Integer id, ProductImageDto productImageDto) {
         ProductImage productImage = productImageRepository.findById(id).orElseThrow(()->new ResourceNotFoundException("Product Image Not Found"));
-        Product product = productRepository.findById(id).orElseThrow(()->new ResourceNotFoundException("Product Not Found"));
+        Product product = productRepository.findById(productImageDto.getProductId()).orElseThrow(()->new ResourceNotFoundException("Product Not Found"));
         productImage.setProduct(product);
         productImage.setName(productImageDto.getName());
         productImage.setData(productImageDto.getData());

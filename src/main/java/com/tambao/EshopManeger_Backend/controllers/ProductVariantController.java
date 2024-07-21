@@ -27,7 +27,7 @@ public class ProductVariantController {
     public ResponseEntity<?> getProductVariantByProductId(@RequestParam("productId") Integer productId) {
         List<ProductVariantDto> productVariantDtos = productVariantService.getProductVariantByProductId(productId);
         if(productVariantDtos.isEmpty()){
-            return ResponseEntity.notFound().build();
+            return new ResponseEntity<>("Product Variant Not Found With ProductId = "+productId,HttpStatus.NOT_FOUND);
         }
         return ResponseEntity.ok(productVariantDtos);
     }

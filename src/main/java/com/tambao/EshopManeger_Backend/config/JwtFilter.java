@@ -2,6 +2,10 @@ package com.tambao.EshopManeger_Backend.config;
 
 import com.tambao.EshopManeger_Backend.service.Impl.JwtService;
 import com.tambao.EshopManeger_Backend.service.Impl.UsersService;
+import io.jsonwebtoken.ExpiredJwtException;
+import io.jsonwebtoken.JwtException;
+import io.jsonwebtoken.MalformedJwtException;
+import io.jsonwebtoken.UnsupportedJwtException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -11,12 +15,12 @@ import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.web.authentication.WebAuthenticationDetails;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
+import java.security.SignatureException;
 
 @Component
 public class JwtFilter extends OncePerRequestFilter {
@@ -34,7 +38,21 @@ public class JwtFilter extends OncePerRequestFilter {
         String username = null;
         if(authHeader != null && authHeader.startsWith("Bearer ")){
             token = authHeader.substring(7);
-            username = jwtService.extractUsername(token);
+            try {
+                username = jwtService.extractUsername(token);
+            } catch (ExpiredJwtException e) {
+                response.setStatus(HttpStatus.UNAUTHORIZED.value());
+                response.getWriter().println("JWT Token has expired. Please login again.");
+                return;
+            }catch (JwtException e) {
+                response.setStatus(HttpStatus.BAD_REQUEST.value());
+                response.getWriter().write("JWT Token is invalid.");
+                return;
+            } catch (Exception e) {
+                response.setStatus(HttpStatus.INTERNAL_SERVER_ERROR.value());
+                response.getWriter().write("An unexpected error occurred: " + e.getMessage());
+                return;
+            }
         }
 
         if(username != null && SecurityContextHolder.getContext().getAuthentication() == null){

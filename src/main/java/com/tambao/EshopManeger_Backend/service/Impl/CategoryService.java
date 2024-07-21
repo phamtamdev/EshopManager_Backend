@@ -2,9 +2,11 @@ package com.tambao.EshopManeger_Backend.service.Impl;
 
 import com.tambao.EshopManeger_Backend.dto.CategoryDto;
 import com.tambao.EshopManeger_Backend.entity.Category;
+import com.tambao.EshopManeger_Backend.entity.Product;
 import com.tambao.EshopManeger_Backend.exception.ResourceNotFoundException;
 import com.tambao.EshopManeger_Backend.mapper.CategoryMapper;
 import com.tambao.EshopManeger_Backend.repository.CategoryRepository;
+import com.tambao.EshopManeger_Backend.repository.ProductRepository;
 import com.tambao.EshopManeger_Backend.service.ICategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.*;
@@ -17,6 +19,9 @@ import java.util.stream.Collectors;
 public class CategoryService implements ICategoryService {
     @Autowired
     private CategoryRepository categoryRepository;
+
+    @Autowired
+    private ProductRepository productRepository;
 
     @Override
     public List<CategoryDto> getAllCategories() {
@@ -85,6 +90,11 @@ public class CategoryService implements ICategoryService {
     public void deleteCategory(Integer id) {
         Category category = categoryRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Category not found" + id));
+        List<Product> products = productRepository.findByCategoryId(id);
+        for (Product product : products) {
+            product.setCategory(null);
+            productRepository.save(product);
+        }
         categoryRepository.delete(category);
     }
 }

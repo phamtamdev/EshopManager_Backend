@@ -11,6 +11,7 @@ import com.tambao.EshopManeger_Backend.service.IProductVariantService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -26,7 +27,10 @@ public class ProductVariantService implements IProductVariantService {
     @Override
     public List<ProductVariantDto> getProductVariantByProductId(Integer productId) {
         List<ProductVariant> productVariants = productVariantRepository.findByProductId(productId);
-        return productVariants.stream().map(ProductVariantMapper::mapToProductVariantDto).collect(Collectors.toList());
+        return productVariants.stream()
+                .sorted(Comparator.comparing(ProductVariant::getVariantValue).reversed())
+                .map(ProductVariantMapper::mapToProductVariantDto)
+                .collect(Collectors.toList());
     }
 
     @Override

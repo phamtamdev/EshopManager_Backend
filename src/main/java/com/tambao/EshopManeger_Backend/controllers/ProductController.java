@@ -57,11 +57,6 @@ public class ProductController {
         return ResponseEntity.ok(productService.getProductById(id));
     }
 
-    @GetMapping("/{id}/product_images")
-    public ResponseEntity<List<ProductImageDto>> getProductImages(@PathVariable("id") int id) {
-        return ResponseEntity.ok(productImageService.findByProductId(id));
-    }
-
     @GetMapping("/{id}/reviews")
     public ResponseEntity<List<ReviewDto>> getReviews(@PathVariable("id") int id) {
         return ResponseEntity.ok(reviewService.findByProduct_Id(id));

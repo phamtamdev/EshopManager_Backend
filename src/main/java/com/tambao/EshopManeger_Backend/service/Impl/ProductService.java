@@ -86,6 +86,7 @@ public class ProductService implements IProductService {
         product.setPrice(productDto.getPrice());
         product.setQuantity(productDto.getQuantity());
         product.setDiscountedPrice(productDto.getDiscountedPrice());
+        product.setBrand(productDto.getBrand());
         product.setCategory(category);
         Product updatedProduct = productRepository.save(product);
         return ProductMapper.mapToProductDTO(updatedProduct);
