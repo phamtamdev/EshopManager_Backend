@@ -3,6 +3,8 @@ package com.tambao.EshopManeger_Backend.mapper;
 import com.tambao.EshopManeger_Backend.dto.UserDto;
 import com.tambao.EshopManeger_Backend.entity.Users;
 
+import java.util.stream.Collectors;
+
 public class UserMapper {
 
     public static UserDto mapToUsersDto(Users user) {
@@ -14,8 +16,11 @@ public class UserMapper {
                 user.getEmail(),
                 user.getPhone(),
                 user.getAddress(),
+                user.getBirthdate(),
+                user.isEnabled(),
                 user.getSource(),
-                user.getAvatar()
+                user.getAvatar(),
+                user.getRoles().stream().map(RoleMapper::mapToRoleDto).collect(Collectors.toList())
         );
     }
 
@@ -28,6 +33,8 @@ public class UserMapper {
         user.setEmail(dto.getEmail());
         user.setPhone(dto.getPhone());
         user.setAddress(dto.getAddress());
+        user.setBirthdate(dto.getBirthdate());
+        user.setEnabled(dto.getEnabled());
         user.setSource(dto.getSource());
         user.setAvatar(dto.getAvatar());
         return user;

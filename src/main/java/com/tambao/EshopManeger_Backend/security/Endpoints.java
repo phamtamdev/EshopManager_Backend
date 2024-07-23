@@ -15,7 +15,7 @@ public class Endpoints {
     };
 
     public static final String[] ADMIN_GET_ENDPOINTS = {
-            "/api/users"
+            "/api/users/**"
     };
 
     public static final String[] ADMIN_POST_ENDPOINTS = {

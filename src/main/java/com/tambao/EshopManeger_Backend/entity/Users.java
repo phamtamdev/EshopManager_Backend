@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Entity
@@ -38,6 +39,9 @@ public class Users {
 
     @Column(name = "address")
     private String address;
+
+    @Column(name = "birthdate")
+    private LocalDate birthdate;
 
     @Column(name = "enabled")
     private boolean enabled ;

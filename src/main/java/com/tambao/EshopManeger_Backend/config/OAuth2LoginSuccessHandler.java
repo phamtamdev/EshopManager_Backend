@@ -3,6 +3,7 @@ import com.tambao.EshopManeger_Backend.dto.UserDto;
 import com.tambao.EshopManeger_Backend.entity.Role;
 import com.tambao.EshopManeger_Backend.entity.Users;
 import com.tambao.EshopManeger_Backend.mapper.UserMapper;
+import com.tambao.EshopManeger_Backend.repository.UserRepository;
 import com.tambao.EshopManeger_Backend.service.Impl.JwtService;
 import com.tambao.EshopManeger_Backend.service.Impl.RoleService;
 import com.tambao.EshopManeger_Backend.service.Impl.UsersService;
@@ -137,7 +138,7 @@ public class OAuth2LoginSuccessHandler implements AuthenticationSuccessHandler {
             Users user = UserMapper.mapToUsers(userDto);
             user.setRoles(List.of(role));
             user.setEnabled(true);
-            usersService.save(user);
+            usersService.saveWithOAuth2(user);
             return user;
         }catch (Exception e){
             e.printStackTrace();
