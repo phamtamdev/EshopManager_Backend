@@ -22,7 +22,8 @@ public class Endpoints {
             "/api/products/**",
             "/api/categories/**",
             "api/product-image/**",
-            "/api/product-variant/**"
+            "/api/product-variant/**",
+            "/api/brands/**"
     };
 
     public static final String[] ADMIN_DELETE_ENDPOINTS = {
@@ -30,6 +31,7 @@ public class Endpoints {
             "/api/categories/**",
             "/api/products/**",
             "/api/product-image/**",
-            "/api/product-variant/**"
+            "/api/product-variant/**",
+            "/api/brands/**"
     };
 }

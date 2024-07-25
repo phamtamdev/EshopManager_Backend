@@ -1,10 +1,12 @@
 package com.tambao.EshopManeger_Backend.service.Impl;
 
 import com.tambao.EshopManeger_Backend.dto.ProductDto;
+import com.tambao.EshopManeger_Backend.entity.Brand;
 import com.tambao.EshopManeger_Backend.entity.Category;
 import com.tambao.EshopManeger_Backend.entity.Product;
 import com.tambao.EshopManeger_Backend.exception.ResourceNotFoundException;
 import com.tambao.EshopManeger_Backend.mapper.ProductMapper;
+import com.tambao.EshopManeger_Backend.repository.BrandRepository;
 import com.tambao.EshopManeger_Backend.repository.CategoryRepository;
 import com.tambao.EshopManeger_Backend.repository.ProductRepository;
 import com.tambao.EshopManeger_Backend.service.IProductService;
@@ -25,6 +27,9 @@ public class ProductService implements IProductService {
 
     @Autowired
     private CategoryRepository categoryRepository;
+
+    @Autowired
+    private BrandRepository brandRepository;
 
     @Override
     public List<ProductDto> getAllProducts() {
@@ -81,13 +86,14 @@ public class ProductService implements IProductService {
                 .orElseThrow(()->new ResourceNotFoundException("Product not found with id= " + id));
         Category category = categoryRepository.findById(productDto.getCategoryId())
                 .orElseThrow(() -> new ResourceNotFoundException("Category not found with id= " + productDto.getCategoryId()));
+        Brand brand = brandRepository.findById(productDto.getBrandId()).orElseThrow(() -> new ResourceNotFoundException("Brand not found with id= " + productDto.getBrandId()));
         product.setName(productDto.getName());
         product.setDescription(productDto.getDescription());
         product.setPrice(productDto.getPrice());
         product.setQuantity(productDto.getQuantity());
         product.setDiscountedPrice(productDto.getDiscountedPrice());
-        product.setBrand(productDto.getBrand());
         product.setCategory(category);
+        product.setBrand(brand);
         Product updatedProduct = productRepository.save(product);
         return ProductMapper.mapToProductDTO(updatedProduct);
     }

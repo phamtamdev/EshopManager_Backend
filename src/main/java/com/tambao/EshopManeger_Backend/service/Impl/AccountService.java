@@ -47,9 +47,8 @@ public class AccountService {
         if(userRepository.existsByEmail(userDto.getEmail())) {
             throw new ResourceNotFoundException("Email already exists");
         }
-
+        userDto.setEnabled(false);
         Users user = UserMapper.mapToUsers(userDto);
-        user.setEnabled(false);
         user.setPassword(bCryptPasswordEncoder.encode(userDto.getPassword()));
         Role role = roleRepository.findByName("USER");
         List<Role> roles = new ArrayList<>();

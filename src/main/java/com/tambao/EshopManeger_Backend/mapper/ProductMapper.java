@@ -1,6 +1,7 @@
 package com.tambao.EshopManeger_Backend.mapper;
 
 import com.tambao.EshopManeger_Backend.dto.ProductDto;
+import com.tambao.EshopManeger_Backend.entity.Brand;
 import com.tambao.EshopManeger_Backend.entity.Category;
 import com.tambao.EshopManeger_Backend.entity.Product;
 
@@ -14,7 +15,9 @@ public class ProductMapper {
         productDto.setPrice(product.getPrice());
         productDto.setQuantity(product.getQuantity());
         productDto.setDiscountedPrice(product.getDiscountedPrice());
-        productDto.setBrand(product.getBrand());
+        if(product.getBrand() != null){
+            productDto.setBrandId(product.getBrand().getId());
+        }
         if (product.getCategory() != null) {
             productDto.setCategoryId(product.getCategory().getId());
         }
@@ -27,7 +30,6 @@ public class ProductMapper {
         product.setName(productDto.getName());
         product.setDescription(productDto.getDescription());
         product.setQuantity(productDto.getQuantity());
-        product.setBrand(productDto.getBrand());
         product.setPrice(productDto.getPrice());
         product.setDiscountedPrice(productDto.getDiscountedPrice());
 
@@ -35,6 +37,12 @@ public class ProductMapper {
             Category category = new Category();
             category.setId(productDto.getCategoryId());
             product.setCategory(category);
+        }
+
+        if (productDto.getBrandId() != null) {
+            Brand brand = new Brand();
+            brand.setId(productDto.getBrandId());
+            product.setBrand(brand);
         }
         return product;
     }

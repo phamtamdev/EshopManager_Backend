@@ -135,9 +135,9 @@ public class OAuth2LoginSuccessHandler implements AuthenticationSuccessHandler {
                 role.setName("USER");
                 roleService.addRole(role);
             }
+            userDto.setEnabled(true);
             Users user = UserMapper.mapToUsers(userDto);
             user.setRoles(List.of(role));
-            user.setEnabled(true);
             usersService.saveWithOAuth2(user);
             return user;
         }catch (Exception e){

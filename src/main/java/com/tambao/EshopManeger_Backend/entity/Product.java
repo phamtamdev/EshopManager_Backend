@@ -36,12 +36,13 @@ public class Product {
     @Column(name = "discounted_price")
     private Double discountedPrice;
 
-    @Column(name = "brand")
-    private String brand;
-
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "category_id")
     private Category category;
+
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "brand_id")
+    private Brand brand;
 
     @OneToMany(mappedBy = "product", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<ProductImage> productImages;
