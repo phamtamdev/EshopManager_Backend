@@ -1,7 +1,6 @@
 package com.tambao.EshopManeger_Backend.service.Impl;
 
 import com.tambao.EshopManeger_Backend.dto.CategoryDto;
-import com.tambao.EshopManeger_Backend.entity.Brand;
 import com.tambao.EshopManeger_Backend.entity.Category;
 import com.tambao.EshopManeger_Backend.entity.Product;
 import com.tambao.EshopManeger_Backend.exception.ResourceNotFoundException;
@@ -83,8 +82,15 @@ public class CategoryService implements ICategoryService {
         Category category = categoryRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Category not found"));
         category.setName(categoryDto.getName());
+        category.setImage(categoryDto.getImage());
+        category.setSlug(categoryDto.getSlug());
         Category updatedCategory = categoryRepository.save(category);
         return CategoryMapper.maptoCategoryDto(updatedCategory);
+    }
+
+    @Override
+    public CategoryDto getCategoryBySlug(String slug) {
+        return CategoryMapper.maptoCategoryDto(categoryRepository.findBySlug(slug));
     }
 
     @Override

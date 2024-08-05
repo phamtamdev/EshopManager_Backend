@@ -32,16 +32,17 @@ public class ProductController {
             @RequestParam(value = "page",required = false) Integer page,
             @RequestParam(value = "size",required = false) Integer size,
             @RequestParam(value = "field",required = false) String field,
-            @RequestParam(value = "keyword",required = false) String keyword
+            @RequestParam(value = "keyword",required = false) String keyword,
+            @RequestParam(value = "sort-order", required = false) String sortOrder
     ) {
         if(page == null || size == null){
             List<ProductDto> products = productService.getAllProducts();
             return ResponseEntity.ok(products);
         } else if (field != null && keyword != null) {
-            Page<ProductDto> products = productService.getProductsWithPageAndSortingAndSearch(field,keyword,page,size);
+            Page<ProductDto> products = productService.getProductsWithPageAndSortingAndSearch(field,keyword,page,size, sortOrder);
             return ResponseEntity.ok(products);
         } else if (field != null) {
-            Page<ProductDto> products = productService.getProductsWithPageAndSorting(field,page,size);
+            Page<ProductDto> products = productService.getProductsWithPageAndSorting(field,page,size,sortOrder);
             return ResponseEntity.ok(products);
         } else if (keyword != null) {
             Page<ProductDto> products = productService.getProductsWithPageAndSearch(keyword,page,size);
@@ -50,6 +51,20 @@ public class ProductController {
             Page<ProductDto> products = productService.getProductsWithPage(page,size);
             return ResponseEntity.ok(products);
         }
+    }
+
+    @GetMapping("/category/{categoryId}")
+    public ResponseEntity<?> getProductByCategoryId(
+            @PathVariable("categoryId") Integer categoryId,
+            @RequestParam(value = "keyword",defaultValue = "", required = false) String keyword,
+            @RequestParam(value = "page", defaultValue = "0",required = false) Integer page,
+            @RequestParam(value = "size", defaultValue = "10", required = false) Integer size,
+            @RequestParam(value = "field", defaultValue = "id", required = false) String field,
+            @RequestParam(value = "sort-order",defaultValue = "asc",required = false) String sortOrder
+
+    ) {
+        Page<ProductDto> products = productService.getProductsByCategoryIdWithSearchAndSort(categoryId, page, size, field, sortOrder, keyword);
+        return ResponseEntity.ok(products);
     }
 
     @GetMapping("/{id}")

@@ -52,15 +52,23 @@ public class ProductService implements IProductService {
     }
 
     @Override
-    public Page<ProductDto> getProductsWithPageAndSorting(String field, int page, int size) {
-        Page<Product> products = productRepository.findAll(PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, field)));
+    public Page<ProductDto> getProductsWithPageAndSorting(String field, int page, int size, String sortOrder) {
+        Pageable pageable = createPageable(page, size, field, sortOrder);
+        Page<Product> products = productRepository.findAll(pageable);
         return products.map(ProductMapper::mapToProductDTO);
     }
 
     @Override
-    public Page<ProductDto> getProductsWithPageAndSortingAndSearch(String field, String keyword, int page, int size) {
-        Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, field));
+    public Page<ProductDto> getProductsWithPageAndSortingAndSearch(String field, String keyword, int page, int size, String sortOrder) {
+        Pageable pageable = createPageable(page, size, field, sortOrder);
         Page<Product> products = productRepository.findByNameContainingIgnoreCase(keyword, pageable);
+        return products.map(ProductMapper::mapToProductDTO);
+    }
+
+    @Override
+    public Page<ProductDto> getProductsByCategoryIdWithSearchAndSort(Integer categoryId, int page, int size, String sortField, String sortOrder, String keyword) {
+        Pageable pageable = createPageable(page, size, sortField, sortOrder);
+        Page<Product> products = productRepository.findByCategoryIdAndNameContaining(categoryId, keyword, pageable);
         return products.map(ProductMapper::mapToProductDTO);
     }
 
@@ -103,5 +111,13 @@ public class ProductService implements IProductService {
         Product product = productRepository.findById(id)
                 .orElseThrow(()->new ResourceNotFoundException("Product not found with id= " + id));
         productRepository.delete(product);
+    }
+
+    private Pageable createPageable(int page, int size, String field, String sortOrder) {
+        Sort.Direction direction = Sort.Direction.ASC;
+        if ("desc".equalsIgnoreCase(sortOrder)) {
+            direction = Sort.Direction.DESC;
+        }
+        return PageRequest.of(page, size, Sort.by(direction, field));
     }
 }

@@ -9,8 +9,9 @@ public interface IProductService {
     List<ProductDto> getAllProducts();
     Page<ProductDto> getProductsWithPage(int page, int size);
     Page<ProductDto> getProductsWithPageAndSearch(String keyword, int page, int size);
-    Page<ProductDto> getProductsWithPageAndSorting(String field, int page, int size);
-    Page<ProductDto> getProductsWithPageAndSortingAndSearch(String field, String keyword, int page, int size);
+    Page<ProductDto> getProductsWithPageAndSorting(String field, int page, int size, String sortOrder);
+    Page<ProductDto> getProductsWithPageAndSortingAndSearch(String field, String keyword, int page, int size, String sortOrder);
+    Page<ProductDto> getProductsByCategoryIdWithSearchAndSort(Integer categoryId, int page, int size,String sortField, String sortOrder, String keyword);
     ProductDto getProductById(int id);
     ProductDto createProduct(ProductDto productDto);
     ProductDto updateProduct(Integer id ,ProductDto productDto);

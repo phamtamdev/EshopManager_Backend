@@ -64,24 +64,14 @@ public class BrandService implements IBrandService {
 
     @Override
     public Page<BrandDto> getBrandsWithPageAndSorting(int page, int size, String field, String sortOrder) {
-        Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.ASC ,field));;
-        if(sortOrder != null && sortOrder.equals("asc")){
-            pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.ASC ,field));
-        } else if (sortOrder != null && sortOrder.equals("desc")) {
-            pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC ,field));
-        }
+        Pageable pageable = createPageable(page,size ,field,sortOrder);
         Page<Brand> brands = brandRepository.findAll(pageable);
         return brands.map(BrandMapper::mapToBrandDto);
     }
 
     @Override
     public Page<BrandDto> getBrandsWithPageAndSearchAndSorting(int page, int size, String keyword, String field, String sortOrder) {
-        Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.ASC, field));
-        if(sortOrder != null && sortOrder.equals("asc")){
-            pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.ASC ,field));
-        } else if (sortOrder != null && sortOrder.equals("desc")) {
-            pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC ,field));
-        }
+        Pageable pageable = createPageable(page,size ,field,sortOrder);
         Page<Brand> brands = brandRepository.findByNameContainingIgnoreCase(keyword, pageable);
         return brands.map(BrandMapper::mapToBrandDto);
     }
@@ -117,5 +107,13 @@ public class BrandService implements IBrandService {
             productRepository.save(product);
         }
         brandRepository.delete(brand);
+    }
+
+    private Pageable createPageable(int page, int size, String field, String sortOrder) {
+        Sort.Direction direction = Sort.Direction.ASC;
+        if ("desc".equalsIgnoreCase(sortOrder)) {
+            direction = Sort.Direction.DESC;
+        }
+        return PageRequest.of(page, size, Sort.by(direction, field));
     }
 }

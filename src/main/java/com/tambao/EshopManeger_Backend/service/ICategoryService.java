@@ -15,5 +15,6 @@ public interface ICategoryService {
     CategoryDto addCategory(CategoryDto categoryDto);
     CategoryDto getCategoryById(int id);
     CategoryDto updateCategory(Integer id, CategoryDto categoryDto);
+    CategoryDto getCategoryBySlug(String slug);
     void deleteCategory(Integer id);
 }
