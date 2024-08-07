@@ -19,9 +19,6 @@ public class ProductVariant {
     @Column(name = "id")
     private Integer id;
 
-    @Column(name = "variant_name")
-    private String variantName;
-
     @Column(name = "variant_value")
     private String variantValue;
 
@@ -31,4 +28,8 @@ public class ProductVariant {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "product_id")
     private Product product;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "variant_id")
+    private Variant variant;
 }

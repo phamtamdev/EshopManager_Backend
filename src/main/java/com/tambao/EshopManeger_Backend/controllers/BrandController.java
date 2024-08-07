@@ -53,6 +53,11 @@ public class BrandController {
         return ResponseEntity.ok(brandService.findBrandByCategoryId(categoryId));
     }
 
+    @GetMapping("/{categoryId}/categoryId/{brandName}")
+    public ResponseEntity<?> getBrandByCategoryIdAndBrandName(@PathVariable(value = "categoryId") Integer categoryId, @PathVariable("brandName") String brandName) {
+        return ResponseEntity.ok(brandService.findByCategoryIdAndName(categoryId, brandName));
+    }
+
     @PostMapping
     public ResponseEntity<?> addBrand(@RequestBody BrandDto brandDto) {
         brandDto.setId(0);

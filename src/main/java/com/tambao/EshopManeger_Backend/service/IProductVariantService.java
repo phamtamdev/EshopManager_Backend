@@ -5,6 +5,7 @@ import com.tambao.EshopManeger_Backend.dto.ProductVariantDto;
 import java.util.List;
 
 public interface IProductVariantService {
+    List<ProductVariantDto> getAllProductVariants();
     List<ProductVariantDto> getProductVariantByProductId(Integer productId);
     ProductVariantDto addProductVariant(ProductVariantDto productVariantDto);
     ProductVariantDto updateProductVariant(Integer id, ProductVariantDto productVariantDto);

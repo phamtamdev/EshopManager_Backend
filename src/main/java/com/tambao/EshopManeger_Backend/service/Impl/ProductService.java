@@ -73,6 +73,13 @@ public class ProductService implements IProductService {
     }
 
     @Override
+    public Page<ProductDto> getProductsByCategoryIdAndBrandIdWithSearchAndSort(Integer categoryId, Integer brandId, int page, int size, String sortField, String sortOrder, String keyword) {
+        Pageable pageable = createPageable(page, size, sortField, sortOrder);
+        Page<Product> products = productRepository.findByCategoryIdAndBrandIdAndNameContaining(categoryId, brandId, keyword, pageable);
+        return products.map(ProductMapper::mapToProductDTO);
+    }
+
+    @Override
     public ProductDto getProductById(int id) {
         Product product = productRepository.findById(id)
                 .orElseThrow(()->new ResourceNotFoundException("Product not found with id= " + id));

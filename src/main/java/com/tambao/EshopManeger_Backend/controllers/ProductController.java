@@ -6,6 +6,8 @@ import com.tambao.EshopManeger_Backend.dto.ReviewDto;
 import com.tambao.EshopManeger_Backend.service.Impl.ProductImageService;
 import com.tambao.EshopManeger_Backend.service.Impl.ProductService;
 import com.tambao.EshopManeger_Backend.service.Impl.ReviewService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
@@ -18,6 +20,7 @@ import java.util.List;
 @RequestMapping("/api/products")
 public class ProductController {
 
+    private static final Logger log = LoggerFactory.getLogger(ProductController.class);
     @Autowired
     private ProductService productService;
 
@@ -56,6 +59,7 @@ public class ProductController {
     @GetMapping("/category/{categoryId}")
     public ResponseEntity<?> getProductByCategoryId(
             @PathVariable("categoryId") Integer categoryId,
+            @RequestParam(value = "brandId",required = false) Integer brandId,
             @RequestParam(value = "keyword",defaultValue = "", required = false) String keyword,
             @RequestParam(value = "page", defaultValue = "0",required = false) Integer page,
             @RequestParam(value = "size", defaultValue = "10", required = false) Integer size,
@@ -63,7 +67,14 @@ public class ProductController {
             @RequestParam(value = "sort-order",defaultValue = "asc",required = false) String sortOrder
 
     ) {
-        Page<ProductDto> products = productService.getProductsByCategoryIdWithSearchAndSort(categoryId, page, size, field, sortOrder, keyword);
+        Page<ProductDto> products;
+        if (brandId != null) {
+            products = productService.getProductsByCategoryIdAndBrandIdWithSearchAndSort(
+                    categoryId, brandId, page, size, field, sortOrder, keyword);
+        } else {
+            products = productService.getProductsByCategoryIdWithSearchAndSort(
+                    categoryId, page, size, field, sortOrder, keyword);
+        }
         return ResponseEntity.ok(products);
     }
 

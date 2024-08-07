@@ -3,10 +3,12 @@ package com.tambao.EshopManeger_Backend.service.Impl;
 import com.tambao.EshopManeger_Backend.dto.ProductVariantDto;
 import com.tambao.EshopManeger_Backend.entity.Product;
 import com.tambao.EshopManeger_Backend.entity.ProductVariant;
+import com.tambao.EshopManeger_Backend.entity.Variant;
 import com.tambao.EshopManeger_Backend.exception.ResourceNotFoundException;
 import com.tambao.EshopManeger_Backend.mapper.ProductVariantMapper;
 import com.tambao.EshopManeger_Backend.repository.ProductRepository;
 import com.tambao.EshopManeger_Backend.repository.ProductVariantRepository;
+import com.tambao.EshopManeger_Backend.repository.VariantRepository;
 import com.tambao.EshopManeger_Backend.service.IProductVariantService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -24,9 +26,20 @@ public class ProductVariantService implements IProductVariantService {
     @Autowired
     private ProductRepository productRepository;
 
+    @Autowired
+    private VariantRepository variantRepository;
+
+    @Override
+    public List<ProductVariantDto> getAllProductVariants() {
+        List<ProductVariant> productVariants = productVariantRepository.findAll();
+        return productVariants.stream()
+                .map(ProductVariantMapper::mapToProductVariantDto)
+                .collect(Collectors.toList());
+    }
+
     @Override
     public List<ProductVariantDto> getProductVariantByProductId(Integer productId) {
-        List<ProductVariant> productVariants = productVariantRepository.findByProductId(productId);
+        List<ProductVariant> productVariants = productVariantRepository.findByProductIdWithVariantName(productId);
         return productVariants.stream()
                 .sorted(Comparator.comparing(ProductVariant::getVariantValue).reversed())
                 .map(ProductVariantMapper::mapToProductVariantDto)
@@ -42,10 +55,11 @@ public class ProductVariantService implements IProductVariantService {
     public ProductVariantDto updateProductVariant(Integer id, ProductVariantDto productVariantDto) {
         ProductVariant productVariant = productVariantRepository.findById(id).orElseThrow(()-> new ResourceNotFoundException("Product variant not found"));
         Product product = productRepository.findById(productVariantDto.getProductId()).orElseThrow(()-> new ResourceNotFoundException("Product not found"));
-        productVariant.setVariantName(productVariantDto.getVariantName());
+        Variant variant = variantRepository.findById(productVariantDto.getVariantId()).orElseThrow(()-> new ResourceNotFoundException("Variant not found"));
         productVariant.setVariantValue(productVariantDto.getVariantValue());
         productVariant.setAdditionalPrice(productVariantDto.getAdditionalPrice());
         productVariant.setProduct(product);
+        productVariant.setVariant(variant);
         ProductVariant updatedProductVariant = productVariantRepository.save(productVariant);
         return ProductVariantMapper.mapToProductVariantDto(updatedProductVariant);
     }

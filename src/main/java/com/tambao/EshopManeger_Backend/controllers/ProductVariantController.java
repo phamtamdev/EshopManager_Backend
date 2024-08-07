@@ -16,6 +16,11 @@ public class ProductVariantController {
     @Autowired
     private ProductVariantService productVariantService;
 
+    @GetMapping
+    public ResponseEntity<?> getAllProductVariants() {
+        return new ResponseEntity<>(productVariantService.getAllProductVariants(), HttpStatus.OK);
+    }
+
     @PostMapping
     public ResponseEntity<?> addProductVariant(@RequestBody ProductVariantDto productVariantDto) {
         productVariantDto.setId(0);

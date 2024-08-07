@@ -7,11 +7,8 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class ProductVariantDto {
+public class VariantDto {
     private Integer id;
-    private String variantValue;
-    private double additionalPrice;
-    private Integer productId;
-    private Integer variantId;
-    private String variantName;
+    private String name;
+    private Integer categoryId;
 }

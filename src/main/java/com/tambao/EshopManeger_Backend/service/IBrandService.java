@@ -14,6 +14,7 @@ public interface IBrandService {
     Page<BrandDto> getBrandsWithPageAndSearchAndSorting(int page, int size, String keyword, String field, String sortOrder);
     BrandDto save(BrandDto brandDto);
     BrandDto findById(Integer id);
+    BrandDto findByCategoryIdAndName(Integer categoryId, String name);
     BrandDto update(Integer id, BrandDto brandDto);
     void delete(Integer id);
 }

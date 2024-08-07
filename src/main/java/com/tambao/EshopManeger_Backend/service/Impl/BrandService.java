@@ -88,6 +88,11 @@ public class BrandService implements IBrandService {
     }
 
     @Override
+    public BrandDto findByCategoryIdAndName(Integer categoryId, String name) {
+        return BrandMapper.mapToBrandDto(brandRepository.findBrandByCategoryIdAndNameContainingIgnoreCase(categoryId, name));
+    }
+
+    @Override
     public BrandDto update(Integer id, BrandDto brandDto) {
         Brand brand = brandRepository.findById(id).orElseThrow(()->new ResourceNotFoundException("Brand not found"));
         Category category = categoryRepository.findById(brandDto.getCategoryId()).orElseThrow(()->new ResourceNotFoundException("Category not found"));

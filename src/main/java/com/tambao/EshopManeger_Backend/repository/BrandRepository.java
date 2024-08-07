@@ -10,4 +10,5 @@ import java.util.List;
 public interface BrandRepository extends JpaRepository<Brand, Integer> {
     Page<Brand> findByNameContainingIgnoreCase(String keyword, Pageable pageable);
     List<Brand> findBrandByCategoryId(Integer categoryId);
+    Brand findBrandByCategoryIdAndNameContainingIgnoreCase(Integer categoryId, String brandName);
 }
