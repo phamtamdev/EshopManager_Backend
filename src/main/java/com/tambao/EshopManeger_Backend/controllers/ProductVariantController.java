@@ -37,6 +37,12 @@ public class ProductVariantController {
         return ResponseEntity.ok(productVariantDtos);
     }
 
+    @GetMapping("/{variantId}/variantId")
+    public ResponseEntity<?> getProductVariantByVariantId(@PathVariable("variantId") Integer variantId) {
+        List<ProductVariantDto> productVariantDtos = productVariantService.getByVariantId(variantId);
+        return ResponseEntity.ok(productVariantDtos);
+    }
+
     @PutMapping("/{id}")
     public ResponseEntity<?> updateProductVariant(@PathVariable("id") Integer id, @RequestBody ProductVariantDto productVariantDto) {
         return ResponseEntity.ok(productVariantService.updateProductVariant(id, productVariantDto));

@@ -10,4 +10,5 @@ import java.util.List;
 public interface ProductVariantRepository extends JpaRepository<ProductVariant, Integer> {
     @Query("SELECT pv FROM ProductVariant pv JOIN pv.variant v WHERE pv.product.id = :productId")
     List<ProductVariant> findByProductIdWithVariantName(@Param("productId") Integer productId);
+    List<ProductVariant> findByVariantId(Integer variantId);
 }
