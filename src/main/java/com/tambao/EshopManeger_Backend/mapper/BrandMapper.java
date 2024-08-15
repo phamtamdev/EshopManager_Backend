@@ -10,6 +10,7 @@ public class BrandMapper {
                 brand.getId(),
                 brand.getName(),
                 brand.getImage(),
+                brand.getBanner(),
                 brand.getCategory().getId()
         );
     };
@@ -19,6 +20,7 @@ public class BrandMapper {
         brand.setId(brandDto.getId());
         brand.setName(brandDto.getName());
         brand.setImage(brandDto.getImage());
+        brand.setBanner(brandDto.getBanner());
         if(brandDto.getCategoryId() != null){
             Category category = new Category();
             category.setId(brandDto.getCategoryId());
