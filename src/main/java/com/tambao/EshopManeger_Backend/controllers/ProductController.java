@@ -1,5 +1,6 @@
 package com.tambao.EshopManeger_Backend.controllers;
 
+import com.tambao.EshopManeger_Backend.dto.FilterDto;
 import com.tambao.EshopManeger_Backend.dto.ProductDto;
 import com.tambao.EshopManeger_Backend.dto.ProductImageDto;
 import com.tambao.EshopManeger_Backend.dto.ReviewDto;
@@ -15,6 +16,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/products")
@@ -50,7 +52,7 @@ public class ProductController {
         } else if (keyword != null) {
             Page<ProductDto> products = productService.getProductsWithPageAndSearch(keyword,page,size);
             return ResponseEntity.ok(products);
-        }else{
+        } else {
             Page<ProductDto> products = productService.getProductsWithPage(page,size);
             return ResponseEntity.ok(products);
         }
@@ -65,7 +67,6 @@ public class ProductController {
             @RequestParam(value = "size", defaultValue = "10", required = false) Integer size,
             @RequestParam(value = "field", defaultValue = "id", required = false) String field,
             @RequestParam(value = "sort-order",defaultValue = "asc",required = false) String sortOrder
-
     ) {
         Page<ProductDto> products;
         if (brandId != null) {
@@ -105,5 +106,14 @@ public class ProductController {
     public ResponseEntity<String> deleteProduct(@PathVariable("id") int id) {
         productService.deleteProduct(id);
         return ResponseEntity.ok("Product deleted successfully.");
+    }
+
+    @PostMapping("/filters")
+    public ResponseEntity<?> filterProduct(
+            @RequestBody FilterDto filters,
+            @RequestParam(value = "page", defaultValue = "0", required = false) int page,
+            @RequestParam(value = "size", defaultValue = "10", required = false) int size
+    ) {
+        return ResponseEntity.ok(productService.getProductsByFilters(filters, page, size));
     }
 }

@@ -56,6 +56,12 @@ public class ProductVariantService implements IProductVariantService {
     }
 
     @Override
+    public List<ProductVariantDto> findByVariantIdAndVariantValue(Integer variantId, String variantValue) {
+        List<ProductVariant> productVariants = productVariantRepository.findByVariantIdAndVariantValue(variantId, variantValue);
+        return productVariants.stream().map(ProductVariantMapper::mapToProductVariantDto).collect(Collectors.toList());
+    }
+
+    @Override
     public ProductVariantDto addProductVariant(ProductVariantDto productVariantDto) {
         return ProductVariantMapper.mapToProductVariantDto(productVariantRepository.save(ProductVariantMapper.mapToProductVariant(productVariantDto)));
     }
