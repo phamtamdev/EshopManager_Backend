@@ -116,4 +116,9 @@ public class ProductController {
     ) {
         return ResponseEntity.ok(productService.getProductsByFilters(filters, page, size));
     }
+
+    @GetMapping("/{slug}/slug")
+    public ResponseEntity<?> getProductSlug(@PathVariable("slug") String slug) {
+        return ResponseEntity.ok(productService.getBySlug(slug));
+    }
 }

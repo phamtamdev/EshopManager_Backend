@@ -1,5 +1,6 @@
 package com.tambao.EshopManeger_Backend.service.Impl;
 
+import com.tambao.EshopManeger_Backend.Utils.SlugUtils;
 import com.tambao.EshopManeger_Backend.dto.FilterDto;
 import com.tambao.EshopManeger_Backend.dto.ProductDto;
 import com.tambao.EshopManeger_Backend.entity.Brand;
@@ -122,10 +123,20 @@ public class ProductService implements IProductService {
         product.setPrice(productDto.getPrice());
         product.setQuantity(productDto.getQuantity());
         product.setDiscountedPrice(productDto.getDiscountedPrice());
+        product.setSlug(SlugUtils.toSlug(productDto.getName()));
         product.setCategory(category);
         product.setBrand(brand);
         Product updatedProduct = productRepository.save(product);
         return ProductMapper.mapToProductDTO(updatedProduct);
+    }
+
+    @Override
+    public ProductDto getBySlug(String slug) {
+        Product product = productRepository.findBySlug(slug);
+        if(product == null) {
+            throw new ResourceNotFoundException("Product not found with name= " + slug);
+        }
+        return ProductMapper.mapToProductDTO(product);
     }
 
     @Override

@@ -84,6 +84,7 @@ public class CategoryService implements ICategoryService {
         category.setName(categoryDto.getName());
         category.setImage(categoryDto.getImage());
         category.setSlug(categoryDto.getSlug());
+        category.setDescription(categoryDto.getDescription());
         Category updatedCategory = categoryRepository.save(category);
         return CategoryMapper.maptoCategoryDto(updatedCategory);
     }

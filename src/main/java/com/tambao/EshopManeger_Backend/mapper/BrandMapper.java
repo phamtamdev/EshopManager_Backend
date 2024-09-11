@@ -11,7 +11,8 @@ public class BrandMapper {
                 brand.getName(),
                 brand.getImage(),
                 brand.getBanner(),
-                brand.getCategory().getId()
+                brand.getCategory().getId(),
+                brand.getDescription()
         );
     };
 
@@ -26,6 +27,7 @@ public class BrandMapper {
             category.setId(brandDto.getCategoryId());
             brand.setCategory(category);
         }
+        brand.setDescription(brandDto.getDescription());
         return brand;
     }
 }

@@ -14,4 +14,5 @@ public interface ProductRepository extends JpaRepository<Product, Integer>, JpaS
     Page<Product> findByCategoryIdAndBrandIdAndNameContaining(Integer id, Integer brandId, String keyword, Pageable pageable);
     List<Product> findByCategoryId(Integer id);
     List<Product> findByBrandId(Integer id);
+    Product findBySlug(String slug);
 }

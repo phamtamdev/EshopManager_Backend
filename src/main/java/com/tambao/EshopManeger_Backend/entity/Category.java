@@ -1,7 +1,5 @@
 package com.tambao.EshopManeger_Backend.entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -31,6 +29,9 @@ public class Category {
 
     @Column(name = "slug")
     private String slug;
+
+    @Column(name = "decription", columnDefinition = "LONGTEXT")
+    private String description;
 
     @OneToMany(mappedBy = "category", fetch = FetchType.LAZY, cascade = {
             CascadeType.PERSIST,

@@ -18,5 +18,6 @@ public interface IProductService {
     ProductDto getProductById(int id);
     ProductDto createProduct(ProductDto productDto);
     ProductDto updateProduct(Integer id ,ProductDto productDto);
+    ProductDto getBySlug(String slug);
     void deleteProduct(int id);
 }

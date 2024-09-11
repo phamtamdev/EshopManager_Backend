@@ -31,9 +31,9 @@ public class ProductVariantController {
     @GetMapping("/productId/{productId}")
     public ResponseEntity<?> getProductVariantByProductId(@PathVariable("productId") Integer productId) {
         List<ProductVariantDto> productVariantDtos = productVariantService.getProductVariantByProductId(productId);
-        if(productVariantDtos.isEmpty()){
-            return new ResponseEntity<>("Product Variant Not Found With ProductId = "+productId,HttpStatus.NOT_FOUND);
-        }
+//        if(productVariantDtos.isEmpty()){
+//            return new ResponseEntity<>("Product Variant Not Found With ProductId = "+productId,HttpStatus.NOT_FOUND);
+//        }
         return ResponseEntity.ok(productVariantDtos);
     }
 

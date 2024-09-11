@@ -28,6 +28,9 @@ public class Brand {
     @Column(name = "banner", columnDefinition = "LONGTEXT")
     private String banner;
 
+    @Column(name = "decription", columnDefinition = "LONGTEXT")
+    private String description;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "category_id")
     private Category category;

@@ -100,6 +100,7 @@ public class BrandService implements IBrandService {
         brand.setCategory(category);
         brand.setImage(brandDto.getImage());
         brand.setBanner(brandDto.getBanner());
+        brand.setDescription(brandDto.getDescription());
         Brand updatedBrand = brandRepository.save(brand);
         return BrandMapper.mapToBrandDto(updatedBrand);
     }

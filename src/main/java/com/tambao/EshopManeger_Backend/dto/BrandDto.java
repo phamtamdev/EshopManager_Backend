@@ -13,4 +13,5 @@ public class BrandDto {
     private String image;
     private String banner;
     private Integer categoryId;
+    private String description;
 }

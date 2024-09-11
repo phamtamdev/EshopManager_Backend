@@ -16,6 +16,7 @@ public class ProductDto {
     private int quantity;
     private double price;
     private Double discountedPrice;
+    private String slug;
     private Integer categoryId;
     private Integer brandId;
 }

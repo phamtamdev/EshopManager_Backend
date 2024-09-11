@@ -1,11 +1,12 @@
 package com.tambao.EshopManeger_Backend.entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+
+import java.sql.Date;
 
 @Entity
 @Table(name = "review")
@@ -25,6 +26,12 @@ public class Review {
 
     @Column(name = "comment")
     private String comment;
+
+    @Column(name = "created_at")
+    private Date created_at;
+
+    @Column(name = "has_purchased")
+    private boolean hasPurchased;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")

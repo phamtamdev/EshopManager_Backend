@@ -9,7 +9,8 @@ public class CategoryMapper {
                 category.getId(),
                 category.getName(),
                 category.getImage(),
-                category.getSlug()
+                category.getSlug(),
+                category.getDescription()
         );
     }
 
@@ -19,6 +20,7 @@ public class CategoryMapper {
         category.setName(categoryDto.getName());
         category.setImage(categoryDto.getImage());
         category.setSlug(categoryDto.getSlug());
+        category.setDescription(categoryDto.getDescription());
         return category;
     }
 }

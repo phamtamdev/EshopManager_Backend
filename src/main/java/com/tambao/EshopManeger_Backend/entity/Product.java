@@ -36,6 +36,9 @@ public class Product {
     @Column(name = "discounted_price")
     private Double discountedPrice;
 
+    @Column(name = "slug")
+    private String slug;
+
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "category_id")
     private Category category;

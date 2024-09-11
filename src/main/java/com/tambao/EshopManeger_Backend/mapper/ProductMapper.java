@@ -1,5 +1,6 @@
 package com.tambao.EshopManeger_Backend.mapper;
 
+import com.tambao.EshopManeger_Backend.Utils.SlugUtils;
 import com.tambao.EshopManeger_Backend.dto.ProductDto;
 import com.tambao.EshopManeger_Backend.entity.Brand;
 import com.tambao.EshopManeger_Backend.entity.Category;
@@ -15,6 +16,7 @@ public class ProductMapper {
         productDto.setPrice(product.getPrice());
         productDto.setQuantity(product.getQuantity());
         productDto.setDiscountedPrice(product.getDiscountedPrice());
+        productDto.setSlug(product.getSlug());
         if(product.getBrand() != null){
             productDto.setBrandId(product.getBrand().getId());
         }
@@ -32,6 +34,7 @@ public class ProductMapper {
         product.setQuantity(productDto.getQuantity());
         product.setPrice(productDto.getPrice());
         product.setDiscountedPrice(productDto.getDiscountedPrice());
+        product.setSlug(SlugUtils.toSlug(productDto.getName()));
 
         if (productDto.getCategoryId() != null) {
             Category category = new Category();
