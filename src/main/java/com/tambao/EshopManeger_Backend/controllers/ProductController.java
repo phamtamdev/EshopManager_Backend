@@ -58,6 +58,12 @@ public class ProductController {
         }
     }
 
+    @GetMapping("/all")
+    public ResponseEntity<?> getAllProducts() {
+        List<ProductDto> products = productService.getAllProducts();
+        return ResponseEntity.ok(products);
+    }
+
     @GetMapping("/category/{categoryId}")
     public ResponseEntity<?> getProductByCategoryId(
             @PathVariable("categoryId") Integer categoryId,

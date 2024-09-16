@@ -15,12 +15,14 @@ public class UserMapper {
                 user.getFullName(),
                 user.getEmail(),
                 user.getPhone(),
-                user.getAddress(),
                 user.getBirthdate(),
                 user.isEnabled(),
                 user.getSource(),
                 user.getAvatar(),
+                user.getSex(),
+                user.getCreationDate(),
                 user.getRoles().stream().map(RoleMapper::mapToRoleDto).collect(Collectors.toList())
+
         );
     }
 
@@ -32,11 +34,12 @@ public class UserMapper {
         user.setFullName(dto.getFullName());
         user.setEmail(dto.getEmail());
         user.setPhone(dto.getPhone());
-        user.setAddress(dto.getAddress());
         user.setBirthdate(dto.getBirthdate());
         user.setEnabled(dto.getEnabled());
         user.setSource(dto.getSource());
         user.setAvatar(dto.getAvatar());
+        user.setSex(dto.getSex());
+        user.setCreationDate(dto.getCreationDate());
         return user;
     }
 }

@@ -21,23 +21,26 @@ public class ShippingAddress {
     @Column(name = "id")
     private int id;
 
-    @Column(name = "address_line_1")
-    private String addressLine1;
+    @Column(name = "name")
+    private String name;
 
-    @Column(name = "address_line_2")
-    private String addressLine2;
-
-    @Column(name = "commune_or_ward")
-    private String communeOrWard;
+    @Column(name = "province")
+    private String province;
 
     @Column(name = "district")
     private String district;
 
-    @Column(name = "city")
-    private String city;
+    @Column(name = "ward")
+    private String ward;
 
-    @Column(name = "country")
-    private String country;
+    @Column(name = "street_number")
+    private String streetNumber;
+
+    @Column(name = "default_address")
+    private Boolean defaultAddress;
+
+    @Column(name = "fullAddress", columnDefinition = "LONGTEXT")
+    private String fullAddress;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")

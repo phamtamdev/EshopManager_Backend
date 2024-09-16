@@ -19,10 +19,11 @@ public class UserDto {
     private String fullName;
     private String email;
     private String phone;
-    private String address;
     private LocalDate birthdate;
     private Boolean enabled;
     private String source;
     private String avatar;
+    private Integer sex;
+    private LocalDate creationDate;
     private List<RoleDto> roles;
 }

@@ -37,9 +37,6 @@ public class Users {
     @Column(name = "phone")
     private String phone;
 
-    @Column(name = "address")
-    private String address;
-
     @Column(name = "birthdate")
     private LocalDate birthdate;
 
@@ -48,6 +45,12 @@ public class Users {
 
     @Column(name = "source")
     private String source;
+
+    @Column(name = "sex")
+    private Integer sex;
+
+    @Column(name = "creation_date")
+    private LocalDate creationDate;
 
     @Column(name = "avatar", columnDefinition = "LONGTEXT")
     @Lob

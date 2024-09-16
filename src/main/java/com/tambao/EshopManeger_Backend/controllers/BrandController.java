@@ -43,6 +43,12 @@ public class BrandController {
         }
     }
 
+    @GetMapping("/all")
+    public ResponseEntity<?> getAllBrands() {
+        List<BrandDto> allBrands = brandService.getAllBrands();
+        return new ResponseEntity<>(allBrands, HttpStatus.OK);
+    }
+
     @GetMapping("/{id}")
     public ResponseEntity<?> getBrandById(@PathVariable("id") Integer id) {
         return new ResponseEntity<>(brandService.findById(id), HttpStatus.OK);

@@ -22,6 +22,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -63,11 +64,12 @@ public class UsersService implements IUsersService {
         }
         Users user = new Users();
         user.setUserName(userDto.getUserName());
-        user.setAddress(userDto.getAddress());
         user.setEmail(userDto.getEmail());
         user.setFullName(userDto.getFullName());
         user.setBirthdate(userDto.getBirthdate());
         user.setPhone(userDto.getPhone());
+        user.setSex(0);
+        user.setCreationDate(LocalDate.now());
         user.setEnabled(true);
         user.setSource("LOCAL");
         user.setPassword(bCryptPasswordEncoder.encode(userDto.getPassword()));
@@ -87,6 +89,7 @@ public class UsersService implements IUsersService {
 
     @Override
     public Users saveWithOAuth2(Users users) {
+        users.setCreationDate(LocalDate.now());
         return userRepository.save(users);
     }
 
