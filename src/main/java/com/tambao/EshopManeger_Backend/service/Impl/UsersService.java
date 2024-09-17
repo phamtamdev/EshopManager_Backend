@@ -56,10 +56,10 @@ public class UsersService implements IUsersService {
 
     @Override
     public UserDto save(UserDto userDto) {
-        if(userRepository.existsByUserName(userDto.getUserName())) {
+        if (userRepository.existsByUserName(userDto.getUserName())) {
             throw new ResourceNotFoundException("Username already exists");
         }
-        if(userRepository.existsByEmail(userDto.getEmail())) {
+        if (userRepository.existsByEmail(userDto.getEmail())) {
             throw new ResourceNotFoundException("Email already exists");
         }
         Users user = new Users();
@@ -88,13 +88,6 @@ public class UsersService implements IUsersService {
     }
 
     @Override
-    public Users saveWithOAuth2(Users users) {
-        users.setCreationDate(LocalDate.now());
-        return userRepository.save(users);
-    }
-
-
-    @Override
     public UserDto updateRole(Integer id, RoleDto roleDto) {
         Users user = userRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("User not found"));
         Role role = roleRepository.findById(roleDto.getId()).orElseThrow(() -> new ResourceNotFoundException("Role not found"));
@@ -109,10 +102,10 @@ public class UsersService implements IUsersService {
     public UserDto toggleUserStatus(Integer id, Boolean status) {
         Users user = userRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("User not found"));
         boolean isAdmin = user.getRoles().stream().anyMatch(role -> "ADMIN".equals(role.getName()));
-        if(!isAdmin){
+        if (!isAdmin) {
             user.setEnabled(status);
             userRepository.save(user);
-        }else{
+        } else {
             throw new ResourceNotFoundException("Cannot change status of an ADMIN user");
         }
         return UserMapper.mapToUsersDto(user);
@@ -146,11 +139,11 @@ public class UsersService implements IUsersService {
         if (user == null) {
             throw new ResourceNotFoundException("User not found");
         }
-        User userDetails = new User(user.getUserName(), user.getPassword(), user.isEnabled(), true,true,true, rolesAuthorities(user.getRoles()));
+        User userDetails = new User(user.getUserName(), user.getPassword(), user.isEnabled(), true, true, true, rolesAuthorities(user.getRoles()));
         return userDetails;
     }
 
     private Collection<? extends GrantedAuthority> rolesAuthorities(Collection<Role> roles) {
-        return roles.stream().map(role->new SimpleGrantedAuthority(role.getName())).collect(Collectors.toList());
+        return roles.stream().map(role -> new SimpleGrantedAuthority(role.getName())).collect(Collectors.toList());
     }
 }

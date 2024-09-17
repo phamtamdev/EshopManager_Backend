@@ -1,6 +1,7 @@
 package com.tambao.EshopManeger_Backend.controllers;
 
 import com.tambao.EshopManeger_Backend.dto.JwtResponse;
+import com.tambao.EshopManeger_Backend.dto.OAuthDto;
 import com.tambao.EshopManeger_Backend.dto.UserDto;
 import com.tambao.EshopManeger_Backend.repository.UserRepository;
 import com.tambao.EshopManeger_Backend.dto.LoginRequest;
@@ -39,14 +40,21 @@ public class AccountController {
     }
 
     @PostMapping("/register")
-    public ResponseEntity<?> registerAccount(@RequestBody UserDto userDto){
+    public ResponseEntity<?> registerAccount(@RequestBody UserDto userDto) {
         userDto.setId(0);
         userDto = accountService.registerUser(userDto);
         return ResponseEntity.ok(userDto);
     }
 
+    @PostMapping("/register-oauth")
+    public ResponseEntity<?> registerOauth(@RequestBody OAuthDto oAuthDto) {
+        oAuthDto.setId(0);
+        JwtResponse response = accountService.registerWithOauth(oAuthDto);
+        return ResponseEntity.ok(response);
+    }
+
     @GetMapping("/send-otp")
-    public ResponseEntity<?> sendOtp(@RequestParam("email") String email, @RequestParam("otp") String otp){
+    public ResponseEntity<?> sendOtp(@RequestParam("email") String email, @RequestParam("otp") String otp) {
         return ResponseEntity.ok(accountService.otpSend(email, otp));
     }
 
@@ -56,7 +64,7 @@ public class AccountController {
     }
 
     @GetMapping("/info")
-    public ResponseEntity<?> info(){
+    public ResponseEntity<?> info() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String username = authentication.getName();
         JwtResponse response = accountService.getMyInfo(username);
@@ -64,7 +72,7 @@ public class AccountController {
     }
 
     @GetMapping("/active")
-    public ResponseEntity<?> active(@RequestParam("email") String email){
+    public ResponseEntity<?> active(@RequestParam("email") String email) {
         return accountService.activeAccount(email);
     }
 }

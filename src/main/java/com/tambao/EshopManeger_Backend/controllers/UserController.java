@@ -24,17 +24,17 @@ public class UserController {
 
     @GetMapping
     public ResponseEntity<?> getAllCustomers(
-            @RequestParam(value = "page",required = false) Integer page,
-            @RequestParam(value = "size",required = false) Integer size,
-            @RequestParam(value = "keyword",required = false) String keyword
+            @RequestParam(value = "page", required = false) Integer page,
+            @RequestParam(value = "size", required = false) Integer size,
+            @RequestParam(value = "keyword", required = false) String keyword
     ) {
-        if(page == null || size == null) {
+        if (page == null || size == null) {
             List<UserDto> customers = usersService.getAll();
             return ResponseEntity.ok(customers);
-        }else if(keyword != null) {
+        } else if (keyword != null) {
             Page<UserDto> customers = usersService.findAllWithPageableAndSearch(page, size, keyword);
             return ResponseEntity.ok(customers);
-        }else {
+        } else {
             Page<UserDto> customers = usersService.findAllWithPageable(page, size);
             return ResponseEntity.ok(customers);
         }

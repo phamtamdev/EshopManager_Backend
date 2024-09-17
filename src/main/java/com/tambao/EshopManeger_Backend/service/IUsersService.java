@@ -10,12 +10,18 @@ import java.util.List;
 
 public interface IUsersService extends UserDetailsService {
     Users findByEmail(String email);
+
     Users findByUserName(String username);
+
     UserDto save(UserDto userDto);
-    Users saveWithOAuth2(Users users);
+
     UserDto updateRole(Integer id, RoleDto roleDto);
+
     UserDto toggleUserStatus(Integer id, Boolean status);
+
     List<UserDto> getAll();
+
     Page<UserDto> findAllWithPageable(int page, int size);
+
     Page<UserDto> findAllWithPageableAndSearch(int page, int size, String keyword);
 }
