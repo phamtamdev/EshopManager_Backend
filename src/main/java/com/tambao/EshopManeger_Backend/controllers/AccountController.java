@@ -53,6 +53,11 @@ public class AccountController {
         return ResponseEntity.ok(response);
     }
 
+    @PostMapping("/{userId}")
+    public ResponseEntity<?> updateUser(@PathVariable Integer userId, @RequestBody UserDto userDto) {
+        return ResponseEntity.ok(accountService.updateInfo(userId, userDto));
+    }
+
     @GetMapping("/send-otp")
     public ResponseEntity<?> sendOtp(@RequestParam("email") String email, @RequestParam("otp") String otp) {
         return ResponseEntity.ok(accountService.otpSend(email, otp));

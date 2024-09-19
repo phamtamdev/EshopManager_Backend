@@ -4,6 +4,7 @@ import com.tambao.EshopManeger_Backend.dto.RoleDto;
 import com.tambao.EshopManeger_Backend.dto.UserDto;
 import com.tambao.EshopManeger_Backend.service.Impl.RoleService;
 import com.tambao.EshopManeger_Backend.service.Impl.UsersService;
+import com.tambao.EshopManeger_Backend.service.Impl.WishlistsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;

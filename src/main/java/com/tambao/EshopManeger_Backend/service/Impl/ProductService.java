@@ -140,6 +140,11 @@ public class ProductService implements IProductService {
     }
 
     @Override
+    public List<Product> getProductsByIds(List<Integer> productIds) {
+        return productRepository.findAllByIdIn(productIds);
+    }
+
+    @Override
     public void deleteProduct(int id) {
         Product product = productRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Product not found with id= " + id));
         productRepository.delete(product);

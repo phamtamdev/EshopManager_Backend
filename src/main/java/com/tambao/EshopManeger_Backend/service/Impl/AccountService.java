@@ -131,6 +131,17 @@ public class AccountService {
         return response;
     }
 
+    public UserDto updateInfo(Integer userId, UserDto userDto) {
+        Users user = userRepository.findById(userId).orElseThrow(() -> new ResourceNotFoundException("User not found"));
+        user.setFullName(userDto.getFullName());
+        user.setSex(userDto.getSex());
+        if(userDto.getPassword() != null) {
+            user.setPassword(bCryptPasswordEncoder.encode(userDto.getPassword()));
+        }
+        Users userUpdate = userRepository.save(user);
+        return UserMapper.mapToUsersDto(userUpdate);
+    }
+
     public JwtResponse getMyInfo(String userName) {
         JwtResponse response = new JwtResponse();
         try {

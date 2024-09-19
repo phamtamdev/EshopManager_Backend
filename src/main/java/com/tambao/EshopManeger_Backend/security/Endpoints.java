@@ -6,14 +6,18 @@ public class Endpoints {
             "/api/products",
             "/api/categories",
             "/account/**",
-            "/api/shipping-address/**"
+            "/api/shipping-address/**",
+            "/api/wishlists/**"
     };
 
     public static final String[] PUBLIC_POST_ENDPOINTS = {
             "/account/register",
+            "/account/register-oauth",
             "/account/login",
             "/account/forgot",
-            "/api/products/filters"
+            "/api/products/filters",
+            "/account/",
+            "/api/wishlists/**"
     };
 
     public static final String[] ADMIN_GET_ENDPOINTS = {

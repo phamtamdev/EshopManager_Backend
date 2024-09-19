@@ -2,6 +2,7 @@ package com.tambao.EshopManeger_Backend.service;
 
 import com.tambao.EshopManeger_Backend.dto.FilterDto;
 import com.tambao.EshopManeger_Backend.dto.ProductDto;
+import com.tambao.EshopManeger_Backend.entity.Product;
 import org.springframework.data.domain.Page;
 
 import java.util.List;
@@ -19,5 +20,6 @@ public interface IProductService {
     ProductDto createProduct(ProductDto productDto);
     ProductDto updateProduct(Integer id ,ProductDto productDto);
     ProductDto getBySlug(String slug);
+    public List<Product> getProductsByIds(List<Integer> productIds);
     void deleteProduct(int id);
 }
