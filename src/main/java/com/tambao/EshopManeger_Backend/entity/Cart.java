@@ -21,12 +21,6 @@ public class Cart {
     @Column(name = "id")
     private int id;
 
-    @Column(name = "shipping_address")
-    private String shippingAddress;
-
-    @Column(name = "totalAmount")
-    private double totalAmount;
-
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)
     private Users user;

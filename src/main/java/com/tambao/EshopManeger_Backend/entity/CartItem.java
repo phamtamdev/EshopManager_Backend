@@ -25,6 +25,12 @@ public class CartItem {
     @Column(name = "price")
     private Double price;
 
+    @Column(name = "description")
+    private String description;
+
+    @Column(name = "category_slug")
+    private String categorySlug;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "product_id")
     private Product product;

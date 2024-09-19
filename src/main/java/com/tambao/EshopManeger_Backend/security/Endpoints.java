@@ -7,7 +7,8 @@ public class Endpoints {
             "/api/categories",
             "/account/**",
             "/api/shipping-address/**",
-            "/api/wishlists/**"
+            "/api/wishlists/**",
+            "/api/cart-items/**"
     };
 
     public static final String[] PUBLIC_POST_ENDPOINTS = {
@@ -17,7 +18,9 @@ public class Endpoints {
             "/account/forgot",
             "/api/products/filters",
             "/account/",
-            "/api/wishlists/**"
+            "/api/wishlists/**",
+            "/api/carts/**",
+            "/api/cart-items/**"
     };
 
     public static final String[] ADMIN_GET_ENDPOINTS = {
