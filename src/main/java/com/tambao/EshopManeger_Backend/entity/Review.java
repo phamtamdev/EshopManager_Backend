@@ -6,7 +6,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.sql.Date;
+import java.sql.Timestamp;
 
 @Entity
 @Table(name = "review")
@@ -28,10 +28,10 @@ public class Review {
     private String comment;
 
     @Column(name = "created_at")
-    private Date created_at;
+    private Timestamp createdAt;
 
     @Column(name = "has_purchased")
-    private boolean hasPurchased;
+    private Boolean hasPurchased;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")

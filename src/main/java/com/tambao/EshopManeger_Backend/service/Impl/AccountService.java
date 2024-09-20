@@ -142,6 +142,11 @@ public class AccountService {
         return UserMapper.mapToUsersDto(userUpdate);
     }
 
+    public UserDto getById(Integer id) {
+        Users user = userRepository.findById(id).orElseThrow(()-> new ResourceNotFoundException("User not found"));
+        return UserMapper.mapToUsersDto(user);
+    }
+
     public JwtResponse getMyInfo(String userName) {
         JwtResponse response = new JwtResponse();
         try {

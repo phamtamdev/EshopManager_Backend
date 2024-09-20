@@ -2,11 +2,7 @@ package com.tambao.EshopManeger_Backend.controllers;
 
 import com.tambao.EshopManeger_Backend.dto.FilterDto;
 import com.tambao.EshopManeger_Backend.dto.ProductDto;
-import com.tambao.EshopManeger_Backend.dto.ProductImageDto;
-import com.tambao.EshopManeger_Backend.dto.ReviewDto;
-import com.tambao.EshopManeger_Backend.service.Impl.ProductImageService;
 import com.tambao.EshopManeger_Backend.service.Impl.ProductService;
-import com.tambao.EshopManeger_Backend.service.Impl.ReviewService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,7 +12,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Map;
 
 @RestController
 @RequestMapping("/api/products")
@@ -26,34 +21,28 @@ public class ProductController {
     @Autowired
     private ProductService productService;
 
-    @Autowired
-    private ProductImageService productImageService;
-
-    @Autowired
-    private ReviewService reviewService;
-
     @GetMapping
     public ResponseEntity<?> getProduct(
-            @RequestParam(value = "page",required = false) Integer page,
-            @RequestParam(value = "size",required = false) Integer size,
-            @RequestParam(value = "field",required = false) String field,
-            @RequestParam(value = "keyword",required = false) String keyword,
+            @RequestParam(value = "page", required = false) Integer page,
+            @RequestParam(value = "size", required = false) Integer size,
+            @RequestParam(value = "field", required = false) String field,
+            @RequestParam(value = "keyword", required = false) String keyword,
             @RequestParam(value = "sort-order", required = false) String sortOrder
     ) {
-        if(page == null || size == null){
+        if (page == null || size == null) {
             List<ProductDto> products = productService.getAllProducts();
             return ResponseEntity.ok(products);
         } else if (field != null && keyword != null) {
-            Page<ProductDto> products = productService.getProductsWithPageAndSortingAndSearch(field,keyword,page,size, sortOrder);
+            Page<ProductDto> products = productService.getProductsWithPageAndSortingAndSearch(field, keyword, page, size, sortOrder);
             return ResponseEntity.ok(products);
         } else if (field != null) {
-            Page<ProductDto> products = productService.getProductsWithPageAndSorting(field,page,size,sortOrder);
+            Page<ProductDto> products = productService.getProductsWithPageAndSorting(field, page, size, sortOrder);
             return ResponseEntity.ok(products);
         } else if (keyword != null) {
-            Page<ProductDto> products = productService.getProductsWithPageAndSearch(keyword,page,size);
+            Page<ProductDto> products = productService.getProductsWithPageAndSearch(keyword, page, size);
             return ResponseEntity.ok(products);
         } else {
-            Page<ProductDto> products = productService.getProductsWithPage(page,size);
+            Page<ProductDto> products = productService.getProductsWithPage(page, size);
             return ResponseEntity.ok(products);
         }
     }
@@ -67,12 +56,12 @@ public class ProductController {
     @GetMapping("/category/{categoryId}")
     public ResponseEntity<?> getProductByCategoryId(
             @PathVariable("categoryId") Integer categoryId,
-            @RequestParam(value = "brandId",required = false) Integer brandId,
-            @RequestParam(value = "keyword",defaultValue = "", required = false) String keyword,
-            @RequestParam(value = "page", defaultValue = "0",required = false) Integer page,
+            @RequestParam(value = "brandId", required = false) Integer brandId,
+            @RequestParam(value = "keyword", defaultValue = "", required = false) String keyword,
+            @RequestParam(value = "page", defaultValue = "0", required = false) Integer page,
             @RequestParam(value = "size", defaultValue = "10", required = false) Integer size,
             @RequestParam(value = "field", defaultValue = "id", required = false) String field,
-            @RequestParam(value = "sort-order",defaultValue = "asc",required = false) String sortOrder
+            @RequestParam(value = "sort-order", defaultValue = "asc", required = false) String sortOrder
     ) {
         Page<ProductDto> products;
         if (brandId != null) {
@@ -88,11 +77,6 @@ public class ProductController {
     @GetMapping("/{id}")
     public ResponseEntity<ProductDto> getProduct(@PathVariable("id") int id) {
         return ResponseEntity.ok(productService.getProductById(id));
-    }
-
-    @GetMapping("/{id}/reviews")
-    public ResponseEntity<List<ReviewDto>> getReviews(@PathVariable("id") int id) {
-        return ResponseEntity.ok(reviewService.findByProduct_Id(id));
     }
 
     @PostMapping

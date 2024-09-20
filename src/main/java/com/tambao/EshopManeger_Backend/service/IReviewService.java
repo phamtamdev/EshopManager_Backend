@@ -6,4 +6,5 @@ import java.util.List;
 
 public interface IReviewService {
     List<ReviewDto> findByProduct_Id(int id);
+    ReviewDto addReview(ReviewDto reviewDto);
 }

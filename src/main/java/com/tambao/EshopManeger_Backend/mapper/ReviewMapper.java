@@ -12,18 +12,32 @@ public class ReviewMapper {
                 review.getId(),
                 review.getRating(),
                 review.getComment(),
+                review.getCreatedAt(),
+                review.getHasPurchased(),
                 review.getUser().getId(),
                 review.getProduct().getId()
         );
     }
 
-    public static Review mapToReview(ReviewDto reviewDto, Users user, Product product) {
+    public static Review mapToReview(ReviewDto reviewDto) {
         Review review = new Review();
         review.setId(reviewDto.getId());
         review.setRating(reviewDto.getRating());
         review.setComment(reviewDto.getComment());
-        review.setUser(user);
-        review.setProduct(product);
+        review.setCreatedAt(reviewDto.getCreatedAt());
+        review.setHasPurchased(reviewDto.getHasPurchased());
+
+        if(reviewDto.getUserId() != null){
+            Users user = new Users();
+            user.setId(reviewDto.getUserId());
+            review.setUser(user);
+        }
+
+        if(reviewDto.getProductId() != null){
+            Product product = new Product();
+            product.setId(reviewDto.getProductId());
+            review.setProduct(product);
+        }
         return review;
     }
 }
