@@ -24,11 +24,8 @@ public class Payment {
     @Column(name = "name")
     private String name;
 
-    @Column(name = "decription")
-    private String decription;
-
-    @Column(name = "payment_fee")
-    private Double paymentFee;
+    @Column(name = "image", columnDefinition = "LONGTEXT")
+    private String image;
 
     @OneToMany(mappedBy = "payment", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<Orders> orders;

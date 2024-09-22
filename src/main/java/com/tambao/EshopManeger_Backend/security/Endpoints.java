@@ -9,7 +9,8 @@ public class Endpoints {
             "/api/shipping-address/**",
             "/api/wishlists/**",
             "/api/cart-items/**",
-            "/api/reviews/**"
+            "/api/reviews/**",
+            "/api/payments/**"
     };
 
     public static final String[] PUBLIC_POST_ENDPOINTS = {
@@ -35,7 +36,8 @@ public class Endpoints {
             "api/product-image/**",
             "/api/product-variant/**",
             "/api/brands/**",
-            "/api/variants/**"
+            "/api/variants/**",
+            "/api/payments/**"
     };
 
     public static final String[] ADMIN_DELETE_ENDPOINTS = {
@@ -45,6 +47,7 @@ public class Endpoints {
             "/api/product-image/**",
             "/api/product-variant/**",
             "/api/brands/**",
-            "/api/variants/**"
+            "/api/variants/**",
+            "/api/payments/**"
     };
 }

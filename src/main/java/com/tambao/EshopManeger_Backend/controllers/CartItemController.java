@@ -19,6 +19,11 @@ public class CartItemController {
         return ResponseEntity.ok(cartItemService.getByCartId(cartId));
     }
 
+    @GetMapping("/{cartItemId}")
+    public ResponseEntity<?> getByCartItemId(@PathVariable Integer cartItemId) {
+        return ResponseEntity.ok(cartItemService.getById(cartItemId));
+    }
+
     @PostMapping
     public ResponseEntity<?> addCartItem(@RequestBody CartItemDto cartItemDto) {
         cartItemDto.setId(0);

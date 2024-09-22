@@ -24,14 +24,16 @@ public class Orders {
 
     @Column(name = "create_at")
     private Date createAt;
+
     @Column(name = "total_amount")
     private double totalAmount;
 
-    @Column(name = "status_payment")
-    private String statusPayment;
+    @Column(name = "order_code")
+    private String orderCode;
 
-    @Column(name = "status_shipping")
-    private String statusShipping;
+    @Enumerated(EnumType.STRING)
+    @Column(name = "order_status")
+    private OrderStatus orderStatus;
 
     @OneToMany(mappedBy = "orders", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<OrderItem> orderItem;
@@ -43,10 +45,6 @@ public class Orders {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "payment_id")
     private Payment payment;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "shipping_id")
-    private Shipping shipping;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "shipping_address_id")

@@ -28,6 +28,12 @@ public class CartItemService implements ICartItemService {
     private CartRepository cartRepository;
 
     @Override
+    public CartItemDto getById(Integer id) {
+        CartItem cartItem = cartItemRepository.findById(id).orElseThrow(()->new ResourceNotFoundException("CartItem not found"));
+        return CartItemMapper.mapToCartItemDto(cartItem);
+    }
+
+    @Override
     public CartItemDto addCartItem(CartItemDto cartItemDto) {
         Cart cart = cartRepository.findById(cartItemDto.getCartId()).orElseThrow(() -> new RuntimeException("CartItem not found"));
         Product product = productRepository.findById(cartItemDto.getProductId()).orElseThrow(() -> new RuntimeException("Product not found"));

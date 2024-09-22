@@ -2,7 +2,6 @@ package com.tambao.EshopManeger_Backend.service.Impl;
 
 import com.tambao.EshopManeger_Backend.dto.ReviewDto;
 import com.tambao.EshopManeger_Backend.entity.Review;
-import com.tambao.EshopManeger_Backend.entity.Users;
 import com.tambao.EshopManeger_Backend.mapper.ReviewMapper;
 import com.tambao.EshopManeger_Backend.repository.ReviewRepository;
 import com.tambao.EshopManeger_Backend.service.IReviewService;
