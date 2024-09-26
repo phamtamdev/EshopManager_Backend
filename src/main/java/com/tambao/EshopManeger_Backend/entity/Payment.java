@@ -27,6 +27,9 @@ public class Payment {
     @Column(name = "image", columnDefinition = "LONGTEXT")
     private String image;
 
+    @Column(name = "code")
+    private String code;
+
     @OneToMany(mappedBy = "payment", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<Orders> orders;
 }

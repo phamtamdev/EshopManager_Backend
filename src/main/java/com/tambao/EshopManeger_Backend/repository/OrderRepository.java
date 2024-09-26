@@ -1,0 +1,18 @@
+package com.tambao.EshopManeger_Backend.repository;
+
+import com.tambao.EshopManeger_Backend.entity.OrderStatus;
+import com.tambao.EshopManeger_Backend.entity.Orders;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.repository.JpaRepository;
+
+import java.util.List;
+
+
+public interface OrderRepository extends JpaRepository<Orders, Integer> {
+    Page<Orders> findByOrderCode(String orderCode, Pageable pageable);
+    Page<Orders> findByOrderStatus(OrderStatus orderStatus, Pageable pageable);
+    Orders findByOrderCodeAndUserId(String orderCode, Integer userId);
+    Orders findByOrderCode(String orderCode);
+    List<Orders> findByUserId(Integer userId);
+}

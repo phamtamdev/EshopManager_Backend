@@ -8,7 +8,8 @@ public class PaymentMapper {
         return new PaymentDto(
                 payment.getId(),
                 payment.getName(),
-                payment.getImage()
+                payment.getImage(),
+                payment.getCode()
         );
     }
 
@@ -17,6 +18,7 @@ public class PaymentMapper {
         payment.setId(paymentDto.getId());
         payment.setName(paymentDto.getName());
         payment.setImage(paymentDto.getImage());
+        payment.setCode(paymentDto.getCode());
         return payment;
     }
 }

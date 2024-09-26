@@ -1,10 +1,8 @@
 package com.tambao.EshopManeger_Backend.service.Impl;
 
 import com.tambao.EshopManeger_Backend.dto.PaymentDto;
-import com.tambao.EshopManeger_Backend.entity.Brand;
 import com.tambao.EshopManeger_Backend.entity.Payment;
 import com.tambao.EshopManeger_Backend.exception.ResourceNotFoundException;
-import com.tambao.EshopManeger_Backend.mapper.BrandMapper;
 import com.tambao.EshopManeger_Backend.mapper.PaymentMapper;
 import com.tambao.EshopManeger_Backend.repository.PaymentRepository;
 import com.tambao.EshopManeger_Backend.service.IPaymentService;
@@ -42,6 +40,7 @@ public class PaymentService implements IPaymentService {
         payment.setId(paymentId);
         payment.setName(paymentDto.getName());
         payment.setImage(paymentDto.getImage());
+        payment.setCode(paymentDto.getCode());
         Payment updatedPayment = paymentRepository.save(payment);
         return PaymentMapper.mapToPaymentDto(updatedPayment);
     }
