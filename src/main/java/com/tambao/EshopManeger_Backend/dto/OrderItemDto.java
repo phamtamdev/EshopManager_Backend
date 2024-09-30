@@ -11,6 +11,7 @@ public class OrderItemDto {
     private Integer id;
     private int quantity;
     private double price;
+    private String description;
     private Integer productId;
     private Integer orderId;
 }

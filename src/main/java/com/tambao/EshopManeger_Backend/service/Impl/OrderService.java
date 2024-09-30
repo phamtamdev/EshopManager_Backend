@@ -87,9 +87,12 @@ public class OrderService implements IOrderService {
     public OrderDto getByOrderCodeAndPhone(String orderCode, String phone) {
         Users users = userRepository.findByPhone(phone);
         if (users == null) {
-            throw new ResourceNotFoundException("User not found");
+            return null;
         }
         Orders orders = orderRepository.findByOrderCodeAndUserId(orderCode, users.getId());
+        if(orders == null) {
+            return null;
+        }
         return OrderMapper.mapToOrderDto(orders);
     }
 

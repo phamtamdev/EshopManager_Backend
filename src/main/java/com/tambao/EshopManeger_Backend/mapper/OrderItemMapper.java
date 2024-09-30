@@ -11,6 +11,7 @@ public class OrderItemMapper {
                 orderItem.getId(),
                 orderItem.getQuantity(),
                 orderItem.getPrice(),
+                orderItem.getDescription(),
                 orderItem.getProduct().getId(),
                 orderItem.getOrders().getId()
         );
@@ -21,6 +22,7 @@ public class OrderItemMapper {
         orderItem.setId(dto.getId());
         orderItem.setQuantity(dto.getQuantity());
         orderItem.setPrice(dto.getPrice());
+        orderItem.setDescription(dto.getDescription());
         if (dto.getProductId() != null) {
             Product product = new Product();
             product.setId(dto.getProductId());

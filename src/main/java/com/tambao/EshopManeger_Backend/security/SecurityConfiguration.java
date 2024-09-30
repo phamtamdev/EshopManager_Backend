@@ -4,6 +4,7 @@ import com.tambao.EshopManeger_Backend.config.OAuth2LoginSuccessHandler;
 import com.tambao.EshopManeger_Backend.config.JwtFilter;
 import com.tambao.EshopManeger_Backend.service.Impl.UsersService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -22,6 +23,9 @@ import java.util.Arrays;
 
 @Configuration
 public class SecurityConfiguration {
+
+    @Value("${front_end_url}")
+    public String front_end_host;
 
     @Autowired
     private JwtFilter jwtFilter;
@@ -68,7 +72,7 @@ public class SecurityConfiguration {
         http.cors(cors->{
             cors.configurationSource(request -> {
                 CorsConfiguration corsConfiguration = new CorsConfiguration();
-                corsConfiguration.addAllowedOrigin(Endpoints.front_end_host);
+                corsConfiguration.addAllowedOrigin(front_end_host);
                 corsConfiguration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE"));
                 corsConfiguration.addAllowedHeader("*");
                 return corsConfiguration;

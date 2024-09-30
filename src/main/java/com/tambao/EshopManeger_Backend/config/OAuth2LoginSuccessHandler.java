@@ -10,6 +10,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
 import org.springframework.security.oauth2.core.user.OAuth2User;
@@ -27,7 +28,8 @@ public class OAuth2LoginSuccessHandler implements AuthenticationSuccessHandler {
 
     private final JwtService jwtService;
     private final UsersService usersService;
-    private final String FRONT_END_URL = "http://localhost:3000";
+    @Value("${front_end_url}")
+    private String frontEndUrl;
 
     @Autowired
     private ObjectMapper objectMapper;
@@ -54,7 +56,7 @@ public class OAuth2LoginSuccessHandler implements AuthenticationSuccessHandler {
                 oAuthDto.setSource("GOOGLE");
                 String userDtoJson = objectMapper.writeValueAsString(oAuthDto);
                 String encodedUserDto = URLEncoder.encode(userDtoJson, StandardCharsets.UTF_8.toString());
-                response.sendRedirect(FRONT_END_URL + "/oauth2/redirect?data=" + encodedUserDto);
+                response.sendRedirect(frontEndUrl + "/oauth2/redirect?data=" + encodedUserDto);
             } else {
                 if (existingUser.getSource().equals("GOOGLE")) {
                     String token = jwtService.generateToken(existingUser.getUserName());
@@ -65,9 +67,9 @@ public class OAuth2LoginSuccessHandler implements AuthenticationSuccessHandler {
                     oAuthResponse.setRoles(roles);
                     String json = objectMapper.writeValueAsString(oAuthResponse);
                     String jsonData = URLEncoder.encode(json, StandardCharsets.UTF_8.toString());
-                    response.sendRedirect(FRONT_END_URL + "/oauth2/redirect?token=" + jsonData);
+                    response.sendRedirect(frontEndUrl + "/oauth2/redirect?token=" + jsonData);
                 } else {
-                    response.sendRedirect(FRONT_END_URL + "/login?error-login-google");
+                    response.sendRedirect(frontEndUrl + "/login?error-login-google");
                 }
             }
         } else if ("facebook".equals(auth2Authentication.getAuthorizedClientRegistrationId())) {
@@ -83,7 +85,7 @@ public class OAuth2LoginSuccessHandler implements AuthenticationSuccessHandler {
                 oAuthDto.setSource("FACEBOOK");
                 String userDtoJson = objectMapper.writeValueAsString(oAuthDto);
                 String encodedUserDto = URLEncoder.encode(userDtoJson, StandardCharsets.UTF_8.toString());
-                response.sendRedirect(FRONT_END_URL + "/oauth2/redirect?data=" + encodedUserDto);
+                response.sendRedirect(frontEndUrl + "/oauth2/redirect?data=" + encodedUserDto);
             } else {
                 if (existingUser.getSource().equals("FACEBOOK")) {
                     String token = jwtService.generateToken(existingUser.getUserName());
@@ -94,9 +96,9 @@ public class OAuth2LoginSuccessHandler implements AuthenticationSuccessHandler {
                     oAuthResponse.setRoles(roles);
                     String json = objectMapper.writeValueAsString(oAuthResponse);
                     String jsonData = URLEncoder.encode(json, StandardCharsets.UTF_8.toString());
-                    response.sendRedirect(FRONT_END_URL + "/oauth2/redirect?token=" + jsonData);
+                    response.sendRedirect(frontEndUrl + "/oauth2/redirect?token=" + jsonData);
                 } else {
-                    response.sendRedirect(FRONT_END_URL + "/login?error-login-facebook");
+                    response.sendRedirect(frontEndUrl + "/login?error-login-facebook");
                 }
             }
         } else if ("github".equals(auth2Authentication.getAuthorizedClientRegistrationId())) {
@@ -113,7 +115,7 @@ public class OAuth2LoginSuccessHandler implements AuthenticationSuccessHandler {
                 oAuthDto.setSource("GITHUB");
                 String userDtoJson = objectMapper.writeValueAsString(oAuthDto);
                 String encodedUserDto = URLEncoder.encode(userDtoJson, StandardCharsets.UTF_8.toString());
-                response.sendRedirect(FRONT_END_URL + "/oauth2/redirect?data=" + encodedUserDto);
+                response.sendRedirect(frontEndUrl + "/oauth2/redirect?data=" + encodedUserDto);
             } else {
                 if (existingUser.getSource().equals("GITHUB")) {
                     String token = jwtService.generateToken(existingUser.getUserName());
@@ -124,9 +126,9 @@ public class OAuth2LoginSuccessHandler implements AuthenticationSuccessHandler {
                     oAuthResponse.setRoles(roles);
                     String json = objectMapper.writeValueAsString(oAuthResponse);
                     String jsonData = URLEncoder.encode(json, StandardCharsets.UTF_8.toString());
-                    response.sendRedirect(FRONT_END_URL + "/oauth2/redirect?token=" + jsonData);
+                    response.sendRedirect(frontEndUrl + "/oauth2/redirect?token=" + jsonData);
                 } else {
-                    response.sendRedirect(FRONT_END_URL + "/login?error-login-github");
+                    response.sendRedirect(frontEndUrl + "/login?error-login-github");
                 }
             }
         }
