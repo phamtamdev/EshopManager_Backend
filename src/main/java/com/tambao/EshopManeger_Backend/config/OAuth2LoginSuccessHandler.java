@@ -28,8 +28,8 @@ public class OAuth2LoginSuccessHandler implements AuthenticationSuccessHandler {
 
     private final JwtService jwtService;
     private final UsersService usersService;
-    @Value("${front_end_url}")
-    private String frontEndUrl;
+//    @Value("${front_end_url}")
+    private final String frontEndUrl = "https://eshop-tam-bao.vercel.app";
 
     @Autowired
     private ObjectMapper objectMapper;
