@@ -1,5 +1,6 @@
 package com.tambao.EshopManeger_Backend.controllers;
 
+import com.tambao.EshopManeger_Backend.dto.OrderConfirmationDto;
 import com.tambao.EshopManeger_Backend.dto.OrderDto;
 import com.tambao.EshopManeger_Backend.entity.OrderStatus;
 import com.tambao.EshopManeger_Backend.service.Impl.OrderService;
@@ -68,5 +69,11 @@ public class OrderController {
         order.setId(0);
         order = orderService.createOrder(order);
         return new ResponseEntity<>(order, HttpStatus.CREATED);
+    }
+
+    @PostMapping("/send-confirmation")
+    public ResponseEntity<?> sendConfirmation(@RequestBody OrderConfirmationDto orderConfirmationDto) {
+        orderService.sendEmail(orderConfirmationDto);
+        return ResponseEntity.ok("Successfully sent confirmation email");
     }
 }

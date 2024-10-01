@@ -1,14 +1,13 @@
 package com.tambao.EshopManeger_Backend.service.Impl;
 
 import com.tambao.EshopManeger_Backend.Utils.OrderCodeGenerator;
+import com.tambao.EshopManeger_Backend.dto.OrderConfirmationDto;
 import com.tambao.EshopManeger_Backend.dto.OrderDto;
-import com.tambao.EshopManeger_Backend.entity.OrderStatus;
-import com.tambao.EshopManeger_Backend.entity.Orders;
-import com.tambao.EshopManeger_Backend.entity.Users;
+import com.tambao.EshopManeger_Backend.dto.OrderItemDto;
+import com.tambao.EshopManeger_Backend.entity.*;
 import com.tambao.EshopManeger_Backend.exception.ResourceNotFoundException;
 import com.tambao.EshopManeger_Backend.mapper.OrderMapper;
-import com.tambao.EshopManeger_Backend.repository.OrderRepository;
-import com.tambao.EshopManeger_Backend.repository.UserRepository;
+import com.tambao.EshopManeger_Backend.repository.*;
 import com.tambao.EshopManeger_Backend.service.IOrderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -18,7 +17,9 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.sql.Timestamp;
+import java.text.NumberFormat;
 import java.util.List;
+import java.util.Locale;
 import java.util.stream.Collectors;
 
 @Service
@@ -28,6 +29,21 @@ public class OrderService implements IOrderService {
 
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private EmailService emailService;
+
+    @Autowired
+    private ProductRepository productRepository;
+
+    @Autowired
+    private ProductImageRepository productImageRepository;
+
+    @Autowired
+    private PaymentRepository paymentRepository;
+
+    @Autowired
+    private OrderItemRepository orderItemRepository;
 
     @Override
     public OrderDto createOrder(OrderDto orderDto) {
@@ -90,7 +106,7 @@ public class OrderService implements IOrderService {
             return null;
         }
         Orders orders = orderRepository.findByOrderCodeAndUserId(orderCode, users.getId());
-        if(orders == null) {
+        if (orders == null) {
             return null;
         }
         return OrderMapper.mapToOrderDto(orders);
@@ -104,6 +120,53 @@ public class OrderService implements IOrderService {
             return null;
         }
         return orders.stream().map(OrderMapper::mapToOrderDto).collect(Collectors.toList());
+    }
+
+    public String getFormattedPrice(Double price) {
+        NumberFormat formatter = NumberFormat.getCurrencyInstance(new Locale("vi", "VN"));
+        return formatter.format(price);
+    }
+
+    @Override
+    public void sendEmail(OrderConfirmationDto orderConfirmationDto) {
+        Orders order = orderRepository.findById(orderConfirmationDto.getOrderId()).orElseThrow(() -> new ResourceNotFoundException("Order Not Found"));
+        Payment payment = paymentRepository.findById(order.getPayment().getId()).orElseThrow(() -> new ResourceNotFoundException("Payment Not Found"));
+        List<OrderItem> orderItems = orderItemRepository.findByOrdersId(order.getId());
+        if(orderItems.isEmpty()) {
+            return;
+        }
+        String subject = "Xác nhận đơn hàng";
+        StringBuilder body = new StringBuilder();
+        body.append("<!DOCTYPE html><html lang=\"vi\"><head><meta charset=\"UTF-8\"><title>Xác nhận đơn hàng</title></head><body>");
+        body.append("<h1>Chào ").append(orderConfirmationDto.getFullName()).append(",</h1>");
+        body.append("<p>Chúc mừng! Đơn hàng của bạn trên Eshop đã được xử lý thành công.</p>");
+        body.append("<h2>Thông tin xác nhận đơn hàng:</h2>");
+        body.append("<p>Mã đơn hàng: <strong>").append(order.getOrderCode()).append("</strong></p>");
+        body.append("<p>Phương thức thanh toán: <strong>").append(payment.getName()).append("</strong></p>");
+        body.append("<p>Sản phẩm đã đặt: <strong>").append(orderItems.size()).append("</strong></p>");
+        body.append("<p>Tổng tiền sản phẩm: <strong>").append(getFormattedPrice(order.getTotalPrice())).append("</strong></p>");
+        body.append("<p>Tổng tiền thanh toán: <strong>").append(getFormattedPrice(order.getTotalAmount())).append("</strong></p>");
+        body.append("<h3>Chi tiết đơn hàng của bạn:</h3>");
+        body.append("<table border=\"1\" cellspacing=\"0\" cellpadding=\"10\"><thead><tr><th>Hình Ảnh</th><th>Sản Phẩm</th><th>Số Lượng</th><th>Giá</th><th>Tổng</th></tr></thead><tbody>");
+
+        for (OrderItem item : orderItems) {
+            Product product = productRepository.findById(item.getProduct().getId()).orElseThrow(() -> new ResourceNotFoundException("Product Not Found"));
+            ProductImage productImage = productImageRepository.findByProductIdAndIcon(product.getId(), true);
+            body.append("<tr>");
+            body.append("<td><img src=\"").append(productImage.getData()).append("\" alt=\"")
+                    .append(productImage.getName()).append("\" width=\"100\"></td>");
+            body.append("<td>").append(product.getName()).append("</td>");
+            body.append("<td>").append(item.getQuantity()).append("</td>");
+            body.append("<td>").append(getFormattedPrice(item.getPrice())).append("</td>");
+            body.append("<td>").append(getFormattedPrice(item.getPrice() * item.getQuantity())).append("</td>");
+            body.append("</tr>");
+        }
+
+        body.append("</tbody></table>");
+        body.append("<p>Cảm ơn bạn đã mua sắm tại Eshop!</p>");
+        body.append("</body></html>");
+
+        emailService.sendEmail("tambao11223344@gmail.com", orderConfirmationDto.getEmail(), subject, body.toString());
     }
 
     private Pageable createPageable(int page, int size, String field, String sortOrder) {

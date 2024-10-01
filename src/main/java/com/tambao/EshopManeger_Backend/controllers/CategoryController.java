@@ -1,7 +1,6 @@
 package com.tambao.EshopManeger_Backend.controllers;
 
 import com.tambao.EshopManeger_Backend.dto.CategoryDto;
-import com.tambao.EshopManeger_Backend.mapper.CategoryMapper;
 import com.tambao.EshopManeger_Backend.service.Impl.CategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;

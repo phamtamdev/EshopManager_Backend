@@ -1,5 +1,6 @@
 package com.tambao.EshopManeger_Backend.service;
 
+import com.tambao.EshopManeger_Backend.dto.OrderConfirmationDto;
 import com.tambao.EshopManeger_Backend.dto.OrderDto;
 import com.tambao.EshopManeger_Backend.entity.OrderStatus;
 import org.springframework.data.domain.Page;
@@ -17,4 +18,5 @@ public interface IOrderService {
     Page<OrderDto> getOrdersWithPageAndSortingAndSearch(int page, int size, String field, String sortOrder, String keyword);
     OrderDto getByOrderCodeAndPhone(String orderCode, String phone);
     List<OrderDto> getByUserId(Integer userId);
+    void sendEmail(OrderConfirmationDto orderConfirmationDto);
 }
