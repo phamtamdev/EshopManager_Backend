@@ -10,6 +10,7 @@ import java.util.List;
 public interface IOrderService {
     OrderDto createOrder(OrderDto orderDto);
     OrderDto getOrderByOrderCode(String orderCode);
+    OrderDto getByOrderId(Integer orderId);
     List<OrderDto> getAllOrders();
     Page<OrderDto> getOrdersWithPage(int page, int size);
     Page<OrderDto> getOrdersWithPageAndSearch(int page, int size, String keyword);
@@ -18,5 +19,6 @@ public interface IOrderService {
     Page<OrderDto> getOrdersWithPageAndSortingAndSearch(int page, int size, String field, String sortOrder, String keyword);
     OrderDto getByOrderCodeAndPhone(String orderCode, String phone);
     List<OrderDto> getByUserId(Integer userId);
+    OrderDto updateStatusOrder(Integer orderId, OrderStatus orderStatus);
     void sendEmail(OrderConfirmationDto orderConfirmationDto);
 }

@@ -54,6 +54,11 @@ public class OrderController {
         return ResponseEntity.ok(orderService.getByUserId(userId));
     }
 
+    @GetMapping("/{orderId}/id")
+    public ResponseEntity<?> getOrderById(@PathVariable("orderId") Integer orderId) {
+        return ResponseEntity.ok(orderService.getByOrderId(orderId));
+    }
+
     @GetMapping("/{orderCode}/{phone}")
     public ResponseEntity<?> getOrdersByOrderCode(@PathVariable("phone") String phone, @PathVariable("orderCode") String orderCode) {
         return ResponseEntity.ok(orderService.getByOrderCodeAndPhone(orderCode, phone));
@@ -75,5 +80,10 @@ public class OrderController {
     public ResponseEntity<?> sendConfirmation(@RequestBody OrderConfirmationDto orderConfirmationDto) {
         orderService.sendEmail(orderConfirmationDto);
         return ResponseEntity.ok("Successfully sent confirmation email");
+    }
+
+    @PostMapping("/update-status")
+    public ResponseEntity<?> updateOrderStatus(@RequestParam Integer orderId, @RequestParam OrderStatus status) {
+        return ResponseEntity.ok(orderService.updateStatusOrder(orderId, status));
     }
 }

@@ -60,6 +60,12 @@ public class OrderService implements IOrderService {
     }
 
     @Override
+    public OrderDto getByOrderId(Integer orderId) {
+        Orders orders = orderRepository.findById(orderId).orElseThrow(() -> new ResourceNotFoundException("Order not found"));
+        return OrderMapper.mapToOrderDto(orders);
+    }
+
+    @Override
     public List<OrderDto> getAllOrders() {
         List<Orders> orders = orderRepository.findAll();
         return orders.stream().map(OrderMapper::mapToOrderDto).collect(Collectors.toList());
@@ -74,7 +80,7 @@ public class OrderService implements IOrderService {
     @Override
     public Page<OrderDto> getOrdersWithPageAndSearch(int page, int size, String keyword) {
         Pageable pageable = PageRequest.of(page, size);
-        Page<Orders> orders = orderRepository.findByOrderCode(keyword, pageable);
+        Page<Orders> orders = orderRepository.findByOrderCodeContainingIgnoreCase(keyword, pageable);
         return orders.map(OrderMapper::mapToOrderDto);
     }
 
@@ -95,7 +101,7 @@ public class OrderService implements IOrderService {
     @Override
     public Page<OrderDto> getOrdersWithPageAndSortingAndSearch(int page, int size, String field, String sortOrder, String keyword) {
         Pageable pageable = createPageable(page, size, field, sortOrder);
-        Page<Orders> orders = orderRepository.findByOrderCode(keyword, pageable);
+        Page<Orders> orders = orderRepository.findByOrderCodeContainingIgnoreCase(keyword, pageable);
         return orders.map(OrderMapper::mapToOrderDto);
     }
 
@@ -120,6 +126,14 @@ public class OrderService implements IOrderService {
             return null;
         }
         return orders.stream().map(OrderMapper::mapToOrderDto).collect(Collectors.toList());
+    }
+
+    @Override
+    public OrderDto updateStatusOrder(Integer orderId, OrderStatus orderStatus) {
+        Orders orders = orderRepository.findById(orderId).orElseThrow(() -> new ResourceNotFoundException("Order not found"));
+        orders.setOrderStatus(orderStatus);
+        orderRepository.save(orders);
+        return OrderMapper.mapToOrderDto(orders);
     }
 
     public String getFormattedPrice(Double price) {

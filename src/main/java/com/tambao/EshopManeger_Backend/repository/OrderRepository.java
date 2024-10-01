@@ -10,7 +10,7 @@ import java.util.List;
 
 
 public interface OrderRepository extends JpaRepository<Orders, Integer> {
-    Page<Orders> findByOrderCode(String orderCode, Pageable pageable);
+    Page<Orders> findByOrderCodeContainingIgnoreCase(String orderCode, Pageable pageable);
     Page<Orders> findByOrderStatus(OrderStatus orderStatus, Pageable pageable);
     Orders findByOrderCodeAndUserId(String orderCode, Integer userId);
     Orders findByOrderCode(String orderCode);
