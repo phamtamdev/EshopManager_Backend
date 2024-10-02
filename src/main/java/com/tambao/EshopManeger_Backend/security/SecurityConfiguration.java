@@ -68,7 +68,7 @@ public class SecurityConfiguration {
         http.cors(cors->{
             cors.configurationSource(request -> {
                 CorsConfiguration corsConfiguration = new CorsConfiguration();
-                corsConfiguration.addAllowedOrigin("http://localhost:3000");
+                corsConfiguration.addAllowedOrigin("https://eshop-tam-bao.vercel.app");
                 corsConfiguration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE"));
                 corsConfiguration.addAllowedHeader("*");
                 return corsConfiguration;
