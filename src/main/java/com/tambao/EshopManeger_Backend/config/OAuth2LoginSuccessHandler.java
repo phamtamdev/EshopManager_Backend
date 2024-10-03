@@ -28,6 +28,7 @@ public class OAuth2LoginSuccessHandler implements AuthenticationSuccessHandler {
     private final JwtService jwtService;
     private final UsersService usersService;
     private final String frontEndUrl = "https://eshop-tam-bao.vercel.app";
+//    private final String frontEndUrl = "http://localhost:3000";
 
     @Autowired
     private ObjectMapper objectMapper;
@@ -56,7 +57,7 @@ public class OAuth2LoginSuccessHandler implements AuthenticationSuccessHandler {
                 String encodedUserDto = URLEncoder.encode(userDtoJson, StandardCharsets.UTF_8.toString());
                 response.sendRedirect(frontEndUrl + "/oauth2/redirect?data=" + encodedUserDto);
             } else {
-                if (existingUser.getSource().equals("GOOGLE")) {
+                if (existingUser.getSource().equals("GOOGLE") && existingUser.isEnabled()) {
                     String token = jwtService.generateToken(existingUser.getUserName());
                     List<String> roles = new ArrayList<>();
                     existingUser.getRoles().forEach(role -> roles.add(role.getName()));
@@ -67,7 +68,11 @@ public class OAuth2LoginSuccessHandler implements AuthenticationSuccessHandler {
                     String jsonData = URLEncoder.encode(json, StandardCharsets.UTF_8.toString());
                     response.sendRedirect(frontEndUrl + "/oauth2/redirect?token=" + jsonData);
                 } else {
-                    response.sendRedirect(frontEndUrl + "/login?error-login-google");
+                    String errGoogle = frontEndUrl + "/login?error-login-google";
+                    if(!existingUser.isEnabled()){
+                        errGoogle += "-disabled";
+                    }
+                    response.sendRedirect(errGoogle);
                 }
             }
         } else if ("facebook".equals(auth2Authentication.getAuthorizedClientRegistrationId())) {

@@ -41,7 +41,7 @@ public class Users {
     private LocalDate birthdate;
 
     @Column(name = "enabled")
-    private boolean enabled ;
+    private boolean enabled;
 
     @Column(name = "source")
     private String source;
@@ -82,5 +82,8 @@ public class Users {
 
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<ShippingAddress> shippingAddress;
+
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private List<Notification> notification;
 
 }

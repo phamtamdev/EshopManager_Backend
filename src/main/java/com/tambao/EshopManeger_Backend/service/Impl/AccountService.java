@@ -47,8 +47,10 @@ public class AccountService {
         if (userRepository.existsByUserName(userDto.getUserName())) {
             throw new ResourceNotFoundException("Username already exists");
         }
-        if (userRepository.existsByEmail(userDto.getEmail())) {
-            throw new ResourceNotFoundException("Email already exists");
+        if (!userDto.getEmail().isEmpty()) {
+            if (userRepository.existsByEmail(userDto.getEmail())) {
+                throw new ResourceNotFoundException("Email already exists");
+            }
         }
         userDto.setEnabled(true);
         Users user = UserMapper.mapToUsers(userDto);
@@ -101,6 +103,7 @@ public class AccountService {
         response.setStatusCode(200);
         response.setExpirationTime("24 Hrs");
         response.setMessage("Successfully logged in with OAuth");
+        response.setUserDto(UserMapper.mapToUsersDto(usersNew));
 
         List<String> roles = new ArrayList<>();
         usersNew.getRoles().forEach(r -> roles.add(r.getName()));
@@ -135,7 +138,7 @@ public class AccountService {
         Users user = userRepository.findById(userId).orElseThrow(() -> new ResourceNotFoundException("User not found"));
         user.setFullName(userDto.getFullName());
         user.setSex(userDto.getSex());
-        if(userDto.getPassword() != null) {
+        if (userDto.getPassword() != null) {
             user.setPassword(bCryptPasswordEncoder.encode(userDto.getPassword()));
         }
         Users userUpdate = userRepository.save(user);
@@ -143,7 +146,7 @@ public class AccountService {
     }
 
     public UserDto getById(Integer id) {
-        Users user = userRepository.findById(id).orElseThrow(()-> new ResourceNotFoundException("User not found"));
+        Users user = userRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("User not found"));
         return UserMapper.mapToUsersDto(user);
     }
 
@@ -152,6 +155,11 @@ public class AccountService {
         try {
             Users user = userRepository.findByUserName(userName);
             if (user != null) {
+                if (!user.isEnabled()) {
+                    response.setStatusCode(403);
+                    response.setMessage("User account is disabled");
+                    return response;
+                }
                 response.setStatusCode(200);
                 response.setMessage("Successfully");
                 response.setUserDto(UserMapper.mapToUsersDto(user));
