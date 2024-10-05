@@ -24,7 +24,7 @@ public class Review {
     @Column(name = "rating")
     private int rating;
 
-    @Column(name = "comment")
+    @Column(name = "comment", columnDefinition = "LONGTEXT")
     private String comment;
 
     @Column(name = "created_at")
