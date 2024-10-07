@@ -3,7 +3,6 @@ package com.tambao.EshopManeger_Backend.mapper;
 import com.tambao.EshopManeger_Backend.dto.OrderDto;
 import com.tambao.EshopManeger_Backend.entity.Orders;
 import com.tambao.EshopManeger_Backend.entity.Payment;
-import com.tambao.EshopManeger_Backend.entity.ShippingAddress;
 import com.tambao.EshopManeger_Backend.entity.Users;
 
 public class OrderMapper {
@@ -19,9 +18,9 @@ public class OrderMapper {
                 order.getRecipientName(),
                 order.getRecipientPhone(),
                 order.getRecipientEmail(),
+                order.getRecipientAddress(),
                 order.getUser().getId(),
-                order.getPayment().getId(),
-                order.getShippingAddress().getId()
+                order.getPayment().getId()
         );
     }
 
@@ -37,6 +36,7 @@ public class OrderMapper {
         order.setRecipientName(dto.getRecipientName());
         order.setRecipientPhone(dto.getRecipientPhone());
         order.setRecipientEmail(dto.getRecipientEmail());
+        order.setRecipientAddress(dto.getRecipientAddress());
         if (dto.getUserId() != null) {
             Users user = new Users();
             user.setId(dto.getUserId());
@@ -47,12 +47,6 @@ public class OrderMapper {
             Payment payment = new Payment();
             payment.setId(dto.getPaymentId());
             order.setPayment(payment);
-        }
-
-        if (dto.getShippingAddressId() != null) {
-            ShippingAddress shippingAddress = new ShippingAddress();
-            shippingAddress.setId(dto.getShippingAddressId());
-            order.setShippingAddress(shippingAddress);
         }
         return order;
     }

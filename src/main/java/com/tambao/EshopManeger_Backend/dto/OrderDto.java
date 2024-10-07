@@ -21,7 +21,7 @@ public class OrderDto {
     private String recipientName;
     private String recipientPhone;
     private String recipientEmail;
+    private String recipientAddress;
     private Integer userId;
     private Integer paymentId;
-    private Integer shippingAddressId;
 }

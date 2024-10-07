@@ -44,6 +44,9 @@ public class Orders {
     @Column(name = "recipient_email")
     private String recipientEmail;
 
+    @Column(name = "recipient_address")
+    private String recipientAddress;
+
     @Column(name = "totalPrice")
     private double totalPrice;
 
@@ -60,8 +63,4 @@ public class Orders {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "payment_id")
     private Payment payment;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "shipping_address_id")
-    private ShippingAddress shippingAddress;
 }
