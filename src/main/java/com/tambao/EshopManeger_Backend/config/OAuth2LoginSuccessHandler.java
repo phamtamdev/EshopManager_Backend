@@ -27,7 +27,7 @@ public class OAuth2LoginSuccessHandler implements AuthenticationSuccessHandler {
 
     private final JwtService jwtService;
     private final UsersService usersService;
-    private final String frontEndUrl = "https://eshop-tam-bao.vercel.app";
+    private final String frontEndUrl = "https://eshop-manager-frontend-ybb4-git-main-phamvantam1911s-projects.vercel.app/";
 //    private final String frontEndUrl = "http://localhost:3000";
 
     @Autowired
